@@ -1,0 +1,651 @@
+<html>
+    <head>
+        <meta name="decorator" content="atl.general">
+    	<script>
+            jQuery(document).ready(function() {
+                jQuery(".aui-nav li").removeClass("aui-nav-selected");
+                jQuery("#aui-uid-5").addClass("aui-nav-selected");
+                 
+                AJS.$("#backdoorGroups").auiSelect2({
+                placeholder: 'Select Confluence Groups',
+                ajax: {
+                    url: AJS.contextPath() + '/plugins/servlet/oauth/moapi',
+                    data: function (params) {
+                        var query = {
+                            search: params,
+                            action: 'fetchGroups'
+                        };
+
+                        // Query parameters will be ?search=[term]&type=public
+                        return query;
+                    },
+                    results: function (data, page) {
+                        return {
+                            results: data.results
+                        };
+                    },
+
+                },
+                multiple: true
+            });
+
+            var backdoorGroups = [];
+
+            #foreach($group in $backdoorGroupsList)
+                var groupName = '$group';
+                backdoorGroups.push({
+                    "id": groupName,
+                    "text": groupName
+                });
+            #end
+
+			AJS.$(document).on("change","#disableAnonymousAccess",function() {
+                toggleGuestSession();
+            });
+
+            function toggleGuestSession(){
+                var disableAnonymousAccess = AJS.$("#disableAnonymousAccess");
+                if(disableAnonymousAccess.is(":checked")) {
+                    AJS.$("#guest-session-div").show();
+                }
+                else{
+                    AJS.$("#allowGuestLogin").prop("checked",false);
+                    AJS.$("#guest-session-div").hide();
+                }
+            }
+
+            //AJS.$("#backdoorGroups").auiSelect2();
+            AJS.$("#backdoorGroups").auiSelect2('data', backdoorGroups);
+            });
+        
+        function defaultLoginChange(disableDefaultLogin) {
+            var autoRedirect = document.getElementById("disableDefaultLogin");
+            autoRedirect = autoRedirect.checked ? false : true;
+            if(!autoRedirect) {
+                document.getElementById('backdoor-url').style.display = "block";
+                document.getElementById('show-url-details').style.display = "block";
+				document.getElementById('auto-redirect-delay').style.display = "block";
+
+                var enableBackdoor = document.getElementById("enableBackdoor");
+                enableBackdoor = enableBackdoor.checked ? true : false;
+                if(enableBackdoor){
+                    document.getElementById('enable-backdoor-using-api').style.display = "none";
+                }
+            } else {
+                document.getElementById('backdoor-url').style.display = "none";
+                document.getElementById('show-url-details').style.display = "none";
+				document.getElementById('auto-redirect-delay').style.display = "none";
+            }
+        }
+
+        function copyToClipboard(element, copyButton) {
+            var $temp = $("<input>");
+            $("body").append($temp);
+            $temp.val($(element).text()).select();
+            document.execCommand("copy");
+            $temp.remove();
+            $(copyButton).show();
+            setTimeout(function() { $(copyButton).hide("slow"); }, 5000);
+        }
+        
+        function showBackdoorUrls(){
+            var x = document.getElementById('backdoorUrlDiv');
+            if (x.style.display === 'none') {
+                x.style.display = 'block';
+                document.getElementById('show-url-details').innerHTML = "Hide Backdoor URL";
+            } else {
+                x.style.display = 'none';
+                document.getElementById('show-url-details').innerHTML = "Show Backdoor URL";
+            }
+        }
+
+        function showCustomDelayDiv(){
+      var isAutoredirectDelay = document.getElementById("enableAutoRedirectDelay");
+      if(isAutoredirectDelay.checked){
+          document.getElementById("custom-delay-div").style.display = "inline-block";
+      }else{
+          document.getElementById("custom-delay-div").style.display = "none";
+      }
+
+}
+    </script>
+	<style>
+	    p.wrap {
+	        width:40em;
+	        text-wrap:normal;
+	    }
+	
+	    .show-title:after {
+	        content: attr(title);
+	        font-weight: bold;
+	        color: white;
+	        padding: 0px 10px;
+	        border-radius: 2px;
+	        border: 1px solid #2D4D4D;
+	        background: #2D4D4D;
+	    }
+    </style>
+    </head>
+
+	<body>
+	    #parse("template/com/miniorange/oauth/confluence/header.vm")
+	    <div class="tabs-pane active-pane" id="signin-settings"  role="tabpanel" >
+	        <p style="font-size:14pt;">Sign In Settings</p>
+	        <hr class="header"/>
+	        <form id="signin-settings-form" class="aui long-label" action="" method="POST">
+	            <input type="hidden" name="signinSettingsSubmitted" value="true"/>
+				<input type="hidden" name="atl_token" value="$xsrfToken" />
+				<p>
+					<a id="sign-in-settings" style="font-size:13pt;cursor:pointer">
+						1. Hide Sign In Settings
+					</a>
+				</p>
+				<hr class="header"/>
+				<div class="sign-in-settings-div" id="sign-in-settings-div">
+					<br>
+					<div class="field-group">
+	                	<span style="vertical-align:middle;">
+	    	                <label class="moswitch" style="vertical-align:middle;">
+								<input type="checkbox" id="enableOAuthSSO" value="true" name="enableOAuthSSO"
+	                                    #if($enableOAuthSSO == true) checked="true" #end>
+    	                        <span class="moslider moround"></span>
+                            </label>
+    	                    <span style="height:16px; width: 16px">
+    	                        <strong>Enable SSO for Confluence Server</strong>
+    	                    </span>
+    	                </span>
+					</div>
+				<br/>
+	            <div class="field-group">
+	                <label for="loginButtonText">Login Button Text:
+	                   <span class="aui-icon icon-required">(required)</span>
+	                </label>
+					<input type="text" required="true" id="loginButtonText" name="loginButtonText"
+	                    value="$loginButtonText" class="text long-field" />
+	                <div class="description">Set button label for SSO button shown on login page.</div>           
+	            </div>
+	            
+                <div class="field-group">
+                    #if($ssoButtonLocation == "Before Login Button")
+                        <input class="radio" type="radio" name="ssoButtonLocation" id="beforeLoginButton" value="Before Login Button" checked="checked" />
+                    #else
+                        <input class="radio" type="radio" name="ssoButtonLocation" id="beforeLoginButton" value="Before Login Button" />
+                    #end
+                    <span>Show SSO button before Login Button</span>
+
+                    #if($ssoButtonLocation == "After Login Button")
+                        <input class="radio" type="radio" name="ssoButtonLocation" id="afterLoginButton" value="After Login Button" checked="checked" />
+                    #else
+                        <input class="radio" type="radio" name="ssoButtonLocation" id="afterLoginButton" value="After Login Button" />
+                    #end
+                    <span>Show SSO button after Login Button</span>
+                </div>
+
+	            <div class="field-group">
+	                <label for="relayState">Relay State:</label>
+	                <input type="url" id="relayState" name="relayState" placeholder="Enter the relay state." 
+	                	value="$relayState" class="text long-field" />
+					<div class="description">Enter the absolute URL where you want to redirect the user after SSO. Keep empty to redirect user to the same URL they started with.</div>
+	            </div>
+
+				<div id="disable-anonymous-access" class="field-group">
+                    <label for="disableAnonymousAccess">Disable Anonymous Access</label>
+
+                        <input class="checkbox" data-size="small" data-on-text="Yes" data-off-text="No" type="checkbox"
+                               name="disableAnonymousAccess" #if($disableAnonymousAccess == true) checked="true" #end value="true" id="disableAnonymousAccess"/>
+                    <div class="description">This option redirects users to IdP from all the pages which are accessible anonymously.
+                    </div>
+                </div>
+
+
+                <div id="guest-session-div" #if($disableAnonymousAccess == false) style="display: none" #end>
+                    <div class="field-group">
+                        #if($isAnonymousAccessEnabled == false || $userCreation==false)
+                            <div class="aui-message aui-message-info">To use Guest Login, <a target="_blank" href="$req.contextPath/admin/permissions/editglobalpermissions.action">Enable Anonymous View Access</a> in Global Confluence Permission</div>
+                        #end
+                        <label for="allow-guest-login">Allow Guest Login</label>
+
+                        <input class="checkbox" data-size="small" data-on-text="Yes" data-off-text="No" type="checkbox"
+                               name="allowGuestLogin" #if($allowGuestLogin == true) checked="true" #end value="true" id="allowGuestLogin" #if($isAnonymousAccessEnabled == false || $userCreation==false) disabled #end/>
+                        <div class="description">This option allows non-existing users to access confluence as a guest user. For this option to work,
+                            <ul>
+                                <li>You should turn on <b>Disable User Creation</b> option from <b>User Groups</b> Tab</li>
+                                <li>The Anonymous View access should be set in Global Confluence Permission</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="field-group">
+                        <label for="guest-Session-Timeout">Guest session timeout:
+                        </label>
+                        <input type="text" id="guestSessionTimeout" name="guestSessionTimeout" placeholder="Enter the Guest Session Timeout in minutes."
+                               value="$guestSessionTimeout" class="text long-field" #if($isAnonymousAccessEnabled == false) disabled #end/>
+                        <div class="description">Enter the Guest Session Timeout in minutes.</div>
+                    </div>
+                </div>
+				<div class="field-group">
+					<label for="disableDefaultLogin">Auto Redirect to Application:</label>
+					#if($disableDefaultLogin == true)
+					<input class="checkbox" data-size="small" data-on-text="Yes" data-off-text="No" type="checkbox" name="disableDefaultLogin"
+						   checked="true" value="true" onclick="defaultLoginChange()" id="disableDefaultLogin"/>
+					#else
+					<input class="checkbox" data-size="small" data-on-text="Yes" data-off-text="No" type="checkbox" name="disableDefaultLogin"
+						   value="true" id="disableDefaultLogin" onclick="defaultLoginChange()" />
+					#end
+					This option redirects users to IdP on access of Confluence login page.
+				</div>
+
+	            <div id="backdoor-url" class="field-group" style="display: none;">
+	                 <table>
+	                    <tr>
+	                        <td>
+	                            #if($enableBackdoor == true)
+	                                <input class="checkbox" type="checkbox" name="enableBackdoor" checked="true" value="true" id="enableBackdoor" />
+	                            #else
+	                                <input class="checkbox" type="checkbox" name="enableBackdoor" value="true" id="enableBackdoor" />
+	                            #end
+	                        </td>
+	                        <td>
+	                              <span>Enable Backdoor Login &nbsp;&nbsp;&nbsp;</span>
+	                        </td>
+	                        <td>
+	                            <p>
+                                 <a id="show-url-details" style="font-size:10pt;cursor:pointer">
+                                	  Hide Backdoor URL
+                                 </a>
+                                </p>
+	                        </td>
+	                    </tr>
+	                </table>
+	                <div id="backdoorUrlDiv" style="display: block;">
+	                	<input type="hidden" id="backdoor_submitted" name="backdoorSubmitted" value="false">
+						<table style="word-wrap: break-word; width: 800px">
+							<tr>
+								<td width="42%">
+								   Backdoor/Emergency URL
+								</td>
+								<td width="42%">
+								   <span title="click to copy" style="cursor:default"><p onmousedown="copy(this,'#c1')"> $settings.getLoginPageUrl()?oauth_sso=false </p></span>
+								   <span id="c1" title="Copied" class="show-title" style="display:none"></span>
+							    </td>
+						    </tr>
+					    </table>
+					</div>
+                    <div id="enable-backdoor-using-api" style="width: 90%;" >
+                        <div class="aui-message aui-message-info">
+                            <span>
+                                Backdoor / Emergency URL allows users to access Confluence with their local credentials and will be useful when provider is not available.
+                                In case you get locked out &amp; you want to enable the Backdoor Login, use this REST API<br><br>
+                                <code>
+                                    <strong>Post</strong> : $settings.getBaseUrl()/plugins/servlet/oauth/enablebackdoorurl<br>
+                                    <strong>Header Parameters</strong> :-
+                                    <ul>
+                                        <li>
+                                            Content-Type : application/json
+                                        </li>
+                                        <li>
+                                            Authorization : Basic <base64 encoded="" admin_username:password="">
+                                        </base64></li>
+                                    </ul>
+                                    </code>
+                            </span>
+                        </div>
+                    </div>
+
+	            </div>
+	            
+	            <div id="restrict-backdoor-div" class="field-group">
+                    <input type="checkbox" id="restrictBackdoor" value="true"
+                           name="restrictBackdoor" #if($restrictBackdoor == true) checked="true" #end> Restrict Access to Backdoor URL
+                    <div class="description">Check this box to allow backdoor URL access to selected groups only.</div>
+                </div>
+                <div id="backdoorAccessGroupsList" style="display:none;" class="field-group">
+                    <label for="backdoorGroups">Groups</label>
+                    <input class="select long-field" name="backdoorGroups" id="backdoorGroups"
+                           style="width: 500px"></input>
+                    <div class="description">Select Groups to allow backdoor url access to.</div>
+                </div>
+	            
+	            <!--  enableAutoRedirectDelay Option  -->
+	            <div id="auto-redirect-delay" class="field-group" style="display: none;">
+	                <!--<label for="enableAutoRedirectDelay">Enable AutoRedirect Delay:</label>-->
+	                <table style="word-wrap: break-word">
+                         <tr>
+                            <td>
+                                <input class="checkbox" type="checkbox" name="enableAutoRedirectDelay" onclick="showCustomDelayDiv()"
+                                    value="true" id="enableAutoRedirectDelay" #if($enableAutoRedirectDelay == true) checked="true" #end/>
+	                               <span>
+		                              Enable AutoRedirect Delay
+		                          </span>
+		                    </td>
+                            <td width="20%"></td>
+                           <td>
+                                <div id="custom-delay-div" #if ($enableAutoRedirectDelay == false) style="display: none" #end>
+                                    <span>Delay Time: </span>
+                                        <input class="text short-field" type="number" min="0" name="autoRedirectDelayInterval" placeholder="5" value=$autoRedirectDelayInterval id="autoRedirectDelayInterval" />
+                                 </div>
+                            </td>
+                           </tr>
+                      </table>
+	                <div class="description">Introduce a delay on the login page before user is redirected to the IDP for
+	                    authentication. This lets user go to login page if they don't want to get redirected. Recommended for testing Auto-redirect.
+	                </div>
+	                <br>
+	            </div>
+
+	            <div class="field-group">
+	                <label for="allowDomains">Allowed Domains:</label>
+	                <input type="text" id="allowedDomains" name="allowedDomains"
+	                      value="$allowedDomains" class="text long-field" placeholder="eg. domain1.com;domain2.com;domain3.com" />
+	                <div class="description">Enter the <b>semicolon (;)</b> separated domain names which should be allowed for logging in. Keep empty to allow all the domains. </br> <b>Note: </b>Your OAuth Provider must send email in response.</div>
+	            </div>
+	            
+	            <div class="field-group">
+		        	<label for="adminSessionOption">Secure Admin Login Options:</label>
+		        	#if($adminSessionOption == true)
+		        		<input class="checkbox" data-size="small" data-on-text="Yes" data-off-text="No" type="checkbox" name="adminSessionOption"
+		                    checked="true" value="true" id="adminSessionOption"/>
+		        	#else
+		        		<input class="checkbox" data-size="small" data-on-text="Yes" data-off-text="No" type="checkbox" name="adminSessionOption"
+		                    value="true" id="adminSessionOption"/>	
+		        	#end
+		        	If checked, Admin will not be directly logged in as admin but rather as user on SSO.
+		        </div>
+				</div>
+
+				<p>
+					<a id="login-template-settings" style="font-size:13pt;cursor:pointer">
+						2.Show Custom Login Template
+					</a>
+				</p>
+				<hr class="header"/>
+				<div id="login-template-settings-div">
+					<br>
+
+				<div class="field-group">
+					<label>Custom Login template:</label>
+					<div>
+						#if($enableLoginTemplate == true)
+							<input class="checkbox" type="checkbox"  name="enableLoginTemplate" checked="true" value="true" id="enableLoginTemplate"/>
+						#else
+							<input class="checkbox" type="checkbox"  name="enableLoginTemplate" value="true" id="enableLoginTemplate"/>
+						#end
+					</div>
+				</div>
+
+				<div id="custom_login_template" class="group">
+					<textarea id="loginTemplate"  name="loginTemplate" class="textarea long-field"
+							  style="font-family:Courier New;" cols="64" rows="4">$loginTemplate</textarea>
+					<div class="description">
+						This is default template for Single OAuth setup but you can customize it according to your need or you can design your own SSO login tempate.
+					</div>
+				</div>
+
+                <br/>
+				<div class="group">
+                    <div>
+                        <label for="loginTemplateBackdoor">Default Confluence login page URL </label>
+                        <div>
+                            <div style="border: 1px solid grey;border-radius: 5px;padding: 7px; background-color: lightgray;max-width: 500px;">
+                        <span title="click to copy" style="cursor:default">
+                            <p onmousedown="copyToClipboard(this, '#p1')"><em>$settings.getLoginPageUrl()?show_login_form=true</em></p>
+                        </span>
+                            </div>
+                            <span id="p1" title="Copied" class="show-title" style="display:none;"></span>
+                            <div class="description">Use this option to access Confluence default login page when custom login template is turned on.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+				</div>
+
+				<p>
+					<a id="sign-out-settings" style="font-size:13pt;cursor:pointer">
+						3. Show Sign Out Settings
+					</a>
+				</p>
+				<hr class="header"/>
+				<div id="sign-out-settings-div">
+					<br>
+	            <div>
+	                #if($checkSingleLogoutURL)
+                        <div style="margin:auto; width:70%"class="aui-message aui-message-warning">
+                    	    <span> Warning: Logout Endpoint is configured, Custom Logout URL/Template won't work.</span>
+                    	</div>
+                    #end
+                </div>
+
+                #if($checkSingleLogoutURL)
+                    <div class="field-group">
+                        <label for="customLogoutURL">Custom Logout URL:</label>
+                    	<div>
+                    	    <input class="text long-field" type="url"  name="customLogoutURL"  id="customLogoutURL" placeholder="Custom Logout URL" readonly/>
+                        </div>
+                        <div class="description">
+                    	    Redirect to this URL after logging out (e.g. your IdP logout page). Leave empty to redirect on default Confluence login page.
+                    	</div>
+                    	<p style="font-size:13pt;">&nbsp;&nbsp;&nbsp;OR</p>
+                    	<br>
+                    	<div>
+                    	    <input class="checkbox" type="checkbox"  name="enablelogoutTemplate" value="true" id="enablelogoutTemplate" disabled/>
+                    	    <span>Use Custom Logout Template</span>
+                    	</div>
+                    </div>
+                #else
+                    <div class="field-group">
+					    <label for="customLogoutURL">Custom Logout URL:</label>
+					    <div>
+						    #if($enablelogoutTemplate == true)
+						        <input type="url"  id="customLogoutURL" name="customLogoutURL" value="$customLogoutURL"
+						        placeholder="Custom Logout URL" class="text long-field" disabled="disabled"/>
+						    #else
+						        <input type="url"  id="customLogoutURL" name="customLogoutURL" value="$customLogoutURL"
+						        placeholder="Custom Logout URL" class="text long-field"/>
+						    #end
+						    <div class="description">
+							    Redirect to this URL after logging out (e.g. your IdP logout page). Leave empty to redirect on default Confluence login page.
+						    </div>
+					    </div>
+					     <p style="font-size:13pt;">&nbsp;&nbsp;&nbsp;OR</p>
+					     <br>
+					     <div>
+						    #if($enablelogoutTemplate == true)
+						        <input class="checkbox" type="checkbox"  name="enablelogoutTemplate" checked="true" value="true" id="enablelogoutTemplate"/>
+						    #else
+						        <input class="checkbox" type="checkbox"  name="enablelogoutTemplate" value="true" id="enablelogoutTemplate"/>
+						    #end
+						    <span>Use Custom Logout Template</span>
+				 	     </div>
+				    </div>
+				    <div id="custom_logout_template" class="group" style="display: none;">
+					    <legend><span>Custom Logout Template:</span></legend>
+				        <textarea id="logoutTemplate"  name="logoutTemplate" class="textarea long-field"
+				        style="font-family:Courier New;" cols="64" rows="4">$logoutTemplate</textarea>
+				        <div class="description">
+				            Define the Custom logout page. This template will be shown to the user when user logs out with Single Logout URL defined. <br>Enable Custom Logout template and use <b>$baseUrl</b> for login page.
+				        </div>
+				    </div>
+				#end
+				</div>
+
+				<p>
+					<a id="sso-error-settings" style="font-size:13pt;cursor:pointer">
+						4. Show SSO Error Settings
+					</a>
+				</p>
+				<hr class="header"/>
+
+				<div id="sso-error-settings-div" style="display: block;">
+					<br>
+					<div id="errorTemplate" class="field-group">
+						<legend><span>SSO Error Message Template:</span></legend>
+						#if($enableErrorMsgTemplate == true)
+							<input class="checkbox" type="checkbox" name="enableErrorMsgTemplate" checked="true" value="true"
+								   id="enableErrorMsgTemplate"/>
+						#else
+							<input class="checkbox" type="checkbox" name="enableErrorMsgTemplate" value="true"
+								   id="enableErrorMsgTemplate"/>
+						#end
+						<label for="enableErrorMsgTemplate">SSO Error Message Template:</label>
+						<br>
+						<textarea id="errorMsgTemplate" name="errorMsgTemplate"
+								  class="textarea long-field"
+								  style="font-family:Courier New; display: block" cols="64" rows="4">$errorMsgTemplate</textarea>
+						<div class="description" >
+							Define the Custom SSO error message templates. This template will be shown to the user when SSO
+							fails. <br>Use <b>$baseUrl</b> for login page URL.<br> Use <b>$errorMsg</b> if you want to embed custom error message in your error template.
+						</div>
+					</div>
+					<br>
+					<span style=" font-weight: 500; font-size:16px; ">You can configure the custom error messages for errors given below.</span>
+					<div id="errorMappingInnerContainer" name="errorMappingInnerContainer">
+
+						#set ($loopCount = 0)
+						#foreach($key in $customErrorMappingMap.keySet())
+						<div>
+							<div class="field-group">
+							<br/>
+							<input name="errorMsgKey_$loopCount" type="text" id="errorMsgKey_$loopCount"
+								   placeholder="Default Error Message" style="width:250px" value="$key"  hidden="true" />
+								<label for="enableErrorMsgTemplate">$settings.getDefaultErrorMessagesMap().get($key)</label>
+
+							<textarea class="textarea long-field " id="errorMsgValue_$loopCount"   name="errorMsgValue_$loopCount"
+									  placeholder="Custom Error Message" style="vertical-align:top">$customErrorMappingMap.get($key)</textarea>&nbsp;&nbsp;
+								#if($key == "USER_DOMAIN_NOT_ALLOWED")
+								<div class="description" >
+									This error will occur when the email domain of the user is not allowed to do SSO.
+								</div>
+								#elseif($key == "UNAUTHORIZED_USER_LOGIN")
+								<div class="description" >
+									Either create user is disabled or group is not authorized to access Confluence.
+								</div>
+								#elseif($key == "USER_NOT_FOUND")
+								<div class="description" >
+									This will occur if the user is not present in Confluence and user creation is disabled.
+								</div>
+								#else
+								<div class="description" >
+									This is will occur if SSO fails due to other reasons.
+								</div>
+								#end
+							#set ($loopCount = $loopCount+1)
+							</div>
+						</div>
+						#end
+					</div>
+				</div>
+				<p>
+                	<a id="advanced-sso-settings" style="font-size:13pt;cursor:pointer">
+                		5. Show Advanced SSO Settings
+                	</a>
+                </p>
+                <hr class="header"/>
+				<div id="advanced-sso-settings-div" style="display: block;">
+					<div class="field-group">
+						<label for="remember_me">Remember Me-Cookie:</label>
+						<div>
+							#if($enableRememberMeCookie == true)
+								<input class="checkbox" type="checkbox" name="enableRememberMeCookie"
+									   id="enableRememberMeCookie"
+									   checked="true" value="true" id="enableRememberMeCookie"/>
+							#else
+								<input class="checkbox" type="checkbox" name="enableRememberMeCookie"
+									   id="enableRememberMeCookie"
+									   value="true" id="enableRememberMeCookie"/>
+							#end
+							<span>Set the Remember Me-Cookie after authentication. If enabled, user stays logged in until user explicitly logs out.</span>
+						</div>
+						<p style="font-size:13pt;">&nbsp;&nbsp;&nbsp;OR</p>
+					</div>
+					<div id="sessionTimeOut" class="field-group">
+						Inactive user session will last for Confluence's default session timeout of <strong>1 hours</strong>.
+						<a id="timeout_extend_steps_link" style="cursor:pointer;">Click here</a> to know how to extend
+						Confluence's default session timeout
+						<div id="extendtimeout" class="aui-message aui-message-info" style="display:none;">
+							<ol>
+								<li>
+									Open
+									<i>&lt;Confluence-installation folder&gt;\confluence\WEB-INF\web.xml</i>
+								</li>
+								<li>
+									Set value of
+									<i>&lt;session-timeout&gt;</i> tag in minutes. By default it is 60(1 hours).
+								</li>
+								<li>
+									Please Restart your server
+								</li>
+							</ol>
+						</div>
+					</div>
+
+				    <div class="field-group">
+                        <span style="vertical-align:middle;">
+                              <label class="moswitch" style="vertical-align:middle;">
+
+                                    <input type="checkbox" id="autoActivateUser" value="true" name="autoActivateUser"
+                                        #if($autoActivateUser == true) checked="true" #end>
+                                    <span class="moslider moround"></span>
+                              </label>
+                                <span style="height:16px; width: 16px">
+                                    <strong>Auto Activate Users on SSO</strong>
+                                </span>
+                        </span>
+                        <div class="description">If enabled, deactivated users will be activated automatically after SSO</div>
+                    </div>
+                    <br/>
+                    #if($isAutoLoginSuppProv == true)
+                        <div class="field-group">
+                            <span style="vertical-align:middle;">
+                                  <label class="moswitch" style="vertical-align:middle;">
+
+                                        <input type="checkbox" id="checkIDPSession" value="true" name="checkIDPSession"
+                                            #if($checkIDPSession == true) checked="true" #end >
+                                        <span class="moslider moround"></span>
+                                  </label>
+                                    <span style="height:16px; width: 16px">
+                                        <strong>Attempt automatic login </strong>
+                                    </span>
+                            </span>
+                            <div class="description">Automatically login Users which already have IDP session.</div>
+                        </div>
+                        <br/>
+                        <div id="auto-login-callbackURL" class="field-group" style = "margin-left:30px;">
+                            <code>
+                                <div id="autoLogin-callback-div" title="click to copy" style="border: 1px solid grey;border-radius: 5px;padding: 7px; background-color: #fff5f5 ;max-width: 500px; ">
+                                    <div onmousedown="copyToClipboard(this, '#p2')"> <b style="font-weight:11">$settings.getAutoCallBackUrl()</b></div>
+                                    <span id = "p2" title="Copied" class="show-title" style="display: none;"></span>
+                                </div>
+                            </code>
+                            <div class="description">
+                                Please configure this callback url in the OAuth Provider under Authorized Callback URL's for checking IDP session.
+                            </div>
+                        </div>
+                    #end
+						<div class="field-group">
+							<span style="vertical-align:middle;">
+								   <label class="moswitch" style="vertical-align:middle;">
+
+										<input type="checkbox" id="pluginApiAccessRestriction" value="true" name="pluginApiAccessRestriction"
+											#if($pluginApiAccessRestriction == true) checked="true" #end>
+										<span class="moslider moround"></span>
+									</label>
+									<span style="height:16px; width: 16px">
+										<strong>Restrict access to plugin APIs</strong>
+									</span>
+							</span>
+							<div class="description">When enabled, the plugin's APIs will not be accessible form outside this Confluence instance.</div>
+							<div id="warningforapirestriction" class="aui-message aui-message-warning closeable" style="display:none;">
+								Make sure to check your Referrer Policy for the appropriate setting if Confluence runs behind a reverse proxy.
+							</div>
+						</div>
+                    </div>
+	            <div class="field-group">
+	                <input type="submit" value="Save" class="aui-button aui-button-primary" style="width:100px;"/>&nbsp;&nbsp;&nbsp;
+	                <a href="configure.action" style="width:300px;">Back to configuration</a>
+	            </div>
+        </form>
+	    </div>
+	    </section>
+	</body>
+</html>

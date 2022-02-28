@@ -1,0 +1,109 @@
+<html>
+<head>
+    <meta name="decorator" content="atl.general">
+    <script type="text/javascript">
+        AJS.$(document).ready(function () {
+            AJS.$(".aui-nav li").removeClass("aui-nav-selected");
+            AJS.$("#aui-uid-6").addClass("aui-nav-selected");
+            
+            var cnt = '$count';
+            document.getElementById("idTotalNumberOfRoles").value = cnt;
+        });
+        
+        var counter = '$count';
+        console.log("counter : ", counter);
+        var optionElement ="";
+            
+        function GetDynamicTextBox(value){
+            var htmlElement = '<br/>'+'<input type="text" id="userAttrKey" style="vertical-align:bottom" name="userAttrKey" value="" placeholder="User IP Address" class="text"/>'+'&nbsp&nbsp;' +'&nbsp&nbsp;'                           
+                              +'<input id = "userAttrValue" name = "userAttrValue"  type="text" class="text" placeholder="Session Timeout (seconds)" style="width: 322px value = "' + value + '"/>' +'&nbsp&nbsp;'
+                              +'<input type="button" value="Remove" class="aui-button aui-button-primary"  onclick = "RemoveTextBox(this,'+counter+')" />'
+            return htmlElement;
+         }
+        
+     	function AddTextBox() {
+            var div = document.createElement('DIV');
+            div.innerHTML = GetDynamicTextBox("");
+            var userSessionMappingInnerContainer = document.getElementById("userSessionMappingInnerContainer");
+            userSessionMappingInnerContainer.insertBefore(div,userSessionMappingInnerContainer.childNodes[0] );
+            counter++;
+
+            document.getElementById("idTotalNumberOfRoles").value = parseInt(document.getElementById("idTotalNumberOfRoles").value) + 1;
+        }
+            
+        function RemoveTextBox(div, loopCount) {
+            document.getElementById("userSessionMappingInnerContainer").removeChild(div.parentNode);
+        }
+        
+    </script>
+</head>
+<body>
+    #parse("template/com/miniorange/oauth/confluence/header.vm")
+	<div class="tabs-pane active-pane" id="sessionManagement" role="tabpanel">
+	    <p style="font-size:13pt;">User Session Management</p>
+	    <hr class="header"/>
+	    <form id="session-management-form" class="aui long-label" action="" method="POST">
+	    	<input type="hidden" name="sessionManagementSubmitted" value="true"/>
+            <input type="hidden" name="atl_token" value="$xsrfToken" />
+	        <div class="">
+                <p>Create a user session with specified time interval, and let users to logout automatically after the session expires.</p></br>
+                <div>
+                    <ol>
+                        <li>Click on <b><i>Create User Session</i></b> button.</li>
+                        <li>Enter <b><i>User IP Address</i></b> and <b><i>Session Timeout (seconds)</i></b> in text fields, e.g. <i>192.168.0.1</i> and <i>600 (10 mins) </i></li>
+                        <li>Confluence's default session timeout is of <strong>1 hour</strong>, you can follow the below steps to extend
+	                		Confluence's default session timeout.         	
+		                    <ul>
+		                        <li>
+		                            Open
+		                            <i>&lt;Confluence-installation folder&gt;\confluence\WEB-INF\web.xml</i>
+		                        </li>
+		                        <li>
+		                            Set value of
+		                            <i>&lt;session-timeout&gt;</i> in minutes. By default it is 60 (1 hour).
+		                        </li>
+		                        <li>
+		                            Restart your server.
+		                        </li>
+		                    </ul>
+	                	</li>
+                    </ol>
+                </div>
+            </div>
+            <br/>
+            
+             <div class="field-group">
+                <label for="loginCookie">Configure Login Cookie:</label>
+                <input type="text" id="loginCookie" name="loginCookie"
+                      value="$loginCookie" class="text long-field" placeholder="eg. JSESSIONID" />
+                <div class="description">Enter your login cookie name. Keep empty if you are using default cookie for login i.e., JSESSIONID.</div>
+            </div>
+	            
+            <div class="field-group" id="userSessionMappingContainer" name="userSessionMappingContainer">
+            	<input type='button' value='Create User Session' id='addAttr' class="aui-button aui-button-primary" onclick="AddTextBox()">
+           		<div id="userSessionMappingInnerContainer" name="userSessionMappingInnerContainer">
+	          		#set ($loopCount = 0)
+	          		#foreach($key in $userSessionTimeout.keySet())
+	                <div>
+	                    <br/>
+	                    <input type="text" id="userAttrKey" style="vertical-align:bottom" name="userAttrKey" value="$key" placeholder="User IP Address" class="text"/>&nbsp&nbsp;
+	                    <input type="text" id="userAttrValue" style="vertical-align:bottom" name="userAttrValue" value="$userSessionTimeout.get($key)" placeholder="Session Timeout (seconds)" class="text"/>&nbsp&nbsp;
+	                    <input type="button" value="Remove" style="vertical-align:bottom" class="aui-button aui-button-primary"  onclick = "RemoveTextBox(this, $loopCount)" />
+	                    
+	                    #set ($loopCount = $loopCount+1)
+	                </div>
+	           		#end
+	           </div>
+       		</div></br>
+
+            <div class="field-group">
+                <input type="submit" value="Save" class="aui-button aui-button-primary" style="width:100px;"/>&nbsp;&nbsp;&nbsp;
+                <a href="configure.action" style="width:300px;">Back to configuration</a>
+            </div>
+	   	</form>
+	</div>
+</section>
+</div>
+</div>
+</body>
+</html>

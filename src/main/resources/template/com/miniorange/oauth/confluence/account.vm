@@ -1,0 +1,57 @@
+<html>
+   <head>
+	    <meta name="decorator" content="atl.general">
+	    <script>
+	        jQuery(document).ready(function() {
+	            jQuery(".aui-nav li").removeClass("aui-nav-selected");
+	            jQuery("#aui-uid-1").addClass("aui-nav-selected");
+	        });
+	    </script>
+	</head>
+    <body>
+    	 #parse("template/com/miniorange/oauth/confluence/header.vm")
+    	 <div class="tabs-pane active-pane" id="account"  role="tabpanel" >
+                <p style="font-size:13pt;">Account Info</p>
+                <hr class="header"/>
+                <table class="aui aui-table-interactive">
+                    <tbody>
+                        <tr>
+                            <td headers="name">
+                                <b>Active Users</b>
+                            </td>
+                            <td headers="type">
+                            	#if($settings.getLicensedUsers()>=0)
+                            		$settings.getLicensedUsers()
+                            	#else
+                            		NA
+                            	#end
+							</td>
+                        </tr>
+                         <tr>
+                            <td headers="name">
+                                <b>Max Users Allowed</b>
+                            </td>
+                            <td headers="type">
+                            	#if($settings.getMaxUsers()>0)
+                            		$settings.getMaxUsers()
+                            	#elseif($settings.getMaxUsers()==-1)
+                            		Unlimited
+                            	#else
+                            		Unlicensed
+                            	#end
+							</td>
+                        </tr>  
+                    </tbody>
+                </table>
+         
+            
+            <hr class="header" />
+                <a class="aui-button" href="$req.contextPath/plugins/servlet/dracarys">Reset Settings</a>
+           </div>
+            
+		</div>
+	   </section>
+	  </div>
+	 </div>
+    </body>
+</html>

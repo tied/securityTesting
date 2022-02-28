@@ -1,0 +1,75 @@
+<!-- Contact Us tab of the plugin, lets you send a support query from the plugin -->
+
+<html>
+	<head>
+	    <meta name="decorator" content="atl.general">
+	</head>
+
+	<body>
+	    #parse("template/com/miniorange/oauth/confluence/header.vm")
+	    <div class="tabs-pane active-pane" id="contact-us" role="tabpanel">
+	    	<p style="font-size:16pt;">Troubleshooting</p>
+	        <hr class="header" />
+	        <!--<p>Send us a message, query or feedback using the Support widget (requires Internet) and we will get back to you. Have a lot to say? You can also reach us at <a href="mailto:info@xecurify.com">info@xecurify.com</a>.</p>
+	        <form id="admin" class="aui" action="" method="POST">
+	            <input type="hidden" name="submitSupportQuery" value="true" />
+	            <div class="field-group">
+	                <label for="email">Email:
+	                    <span class="aui-icon icon-required">(required)</span>
+	                </label>
+	            	#if(!(!$settings.getContactEmail()) && ("$settings.getContactEmail()" != ""))
+                        <input type="email" required="true" id="email" name="email"  value="$settings.getContactEmail()";
+                        	class="text long-field"/>
+                    #else
+                        <input type="email" required="true" id="email" name="email"  value="";
+                        	class="text long-field"/>
+                    #end    
+	            </div>
+	           
+	            <div class="field-group">
+	                <label for="query">Query:
+	                    <span class="aui-icon icon-required">(required)</span>
+	                </label>
+	                <textarea id="query" required="true" name="query" rows="5" placeholder="Enter your query here" class="textarea long-field"></textarea>
+	            </div>
+	            <br/>
+	            <div class="field-group">
+	                <input type="submit" value="Submit Query" class="aui-button aui-button-primary" />
+	            </div>
+	        </form>-->
+	        
+	        <p>For troubleshooting use,</p>
+	        
+	        <ul>
+		        <li><b>Log File</b> : You can follow these steps to download logs,
+		            <br>
+		            <div>
+                    				    	<ol>
+                    		                    <li>Go to <b>ADMINISTRATION -> Logging and Profiling </b><a href="$req.contextPath/admin/viewlog4j.action" target="_blank"><span class="aui-icon aui-icon-small aui-iconfont-shortcut"></span></a>.</li>
+                    		                    <li>Enter <i>com.miniorange.oauth</i> in package field under Add New Entry</li>
+                    		                    <li>select Debug in logging level. Click on add.</li>
+                    		                </ol>
+                    		                <br>
+                    		                After these steps, perform single sign-on again to record logs. Then download <i>support zip</i> using these steps,
+                    		                <ol>
+                    		                    <li>Go to <b>ADMINISTRATION -> Troubleshooting and support tools </b><a href="$req.contextPath/plugins/servlet/troubleshooting/view" target="_blank"><span class="aui-icon aui-icon-small aui-iconfont-shortcut"></span></a>.</li>
+                    		                    <li>Proceed to create support zip.</li>
+                                                <li>Click on <b>Customize Zip</b>. Make sure only <b>Confluence application logs</b> option is selected & click on Save</li>
+                    		                    <li>Click on <b>Create zip</b> and then <b>Download zip</b>.</li>
+                    		                </ol>
+                    		            </div>
+		        </li>
+				<li><b>Tracer Log File</b> : <a href="https://faq.miniorange.com/knowledgebase/capture-saml-tracer-logs/" target="_blank">Click here</a>
+					to get steps to capture Tracer logs.	
+				</li>
+		    </ul>
+			<br>
+		    
+		    <p>Send us a message, query or feedback attaching above files using the Support widget (requires Internet) and we will get back to you. Have a lot to say? You can also reach us at <a href="mailto:info@xecurify.com">info@xecurify.com</a>.</p>
+
+	    </div>
+	    </div>
+	    </section>
+	    </div>
+	</body>
+</html>
