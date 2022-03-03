@@ -1,0 +1,195 @@
+<atlassian-plugin key="${atlassian.plugin.key}" name="${project.name}" plugins-version="2">
+    <plugin-info>
+        <description>${project.description}</description>
+        <version>${project.version}</version>
+        <vendor name="${project.organization.name}" url="${project.organization.url}" />
+        <param name="atlassian-data-center-compatible">true</param>
+        <param name="atlassian-licensing-enabled">true</param>
+        <param name="plugin-icon">images/pluginIcon.png</param>
+        <param name="plugin-logo">images/pluginLogo.png</param>
+        <param name="configure.url">/plugins/servlet/bamboo-oauth/configure.action</param>
+    </plugin-info>
+
+    <!-- add our i18n resource -->
+    <resource type="i18n" name="i18n" location="bamboo-oauth" />
+
+    <!-- add our web resources -->
+
+    <web-resource key="oauth.plugin.auth.resources" i18n-name-key="oauth.plugin.auth.resources" name="Authentication Resources">
+        <dependency>com.atlassian.auiplugin:ajs</dependency>
+        <resource name="yt_icon/" location="/images" type="download"/>
+        <resource name="bamboo-oauth.js" type="download" location="/js/bamboo-oauth.js" />
+        <resource type="download" name="bamboo-oauth.css" location="/css/bamboo-oauth.css" />
+        <context>atl.general</context>
+    </web-resource>
+
+    <web-resource key="bamboo-oauth-resources" name="bamboo-oauth Web Resources">
+        <dependency>com.atlassian.auiplugin:ajs</dependency>
+
+        <resource type="download" name="bamboo-oauth.css" location="/css/bamboo-oauth.css" />
+        <resource type="download" name="bamboo-oauth.js" location="/js/bamboo-oauth.js" />
+        <resource type="download" name="images/" location="/images" />
+        <context>atl.admin</context>
+    </web-resource>
+
+    <web-item name="OAuth SSO Configuration Menu" i18n-name-key="oauthsso.config.menu" key="oauthsso.config.menu" section="system.admin/security" weight="150" application="bamboo">
+        <description key="oauth.config.menu.desc">This display menu item for configuring
+            the plugin in System settings under Security.
+        </description>
+        <label key="oauth.config.menu.lable">miniOrange OAuth SSO Configuration</label>
+        <link linkId="oauth.config.menu.link">/plugins/servlet/bamboo-oauth/configure.action</link>
+    </web-item>
+
+    <!-- Action Mapping -->
+
+    <xwork name="XWork Actions" key="oauth-configure-xwork">
+        <package name="OAuth configuration package" extends="default" namespace="/plugins/servlet/bamboo-oauth">
+
+            <action name="configure" class="com.miniorange.oauth.bamboo.action.MoClientConfigurationAction">
+                <interceptor-ref name="defaultStack" />
+                <result name="input" type="freemarker">/templates/configure.ftl</result>
+                <result name="success" type="freemarker">/templates/configure.ftl</result>
+                <result name="upm" type="redirect">/plugins/servlet/upm</result>
+            </action>
+            <action name="groupmappingconfig" class="com.miniorange.oauth.bamboo.action.MoOAuthGroupMappingAction">
+                <interceptor-ref name="defaultStack" />
+                <result name="input" type="freemarker">/templates/groupmappingconfig.ftl</result>
+                <result name="success" type="freemarker">/templates/groupmappingconfig.ftl</result>
+                <result name="upm" type="redirect">/plugins/servlet/upm</result>
+            </action>
+            <action name="importexport" class="com.miniorange.oauth.bamboo.action.MoOAuthImportExportAction">
+                <interceptor-ref name="defaultStack" />
+                <result name="input" type="freemarker">/templates/importexport.ftl</result>
+                <result name="success" type="freemarker">/templates/importexport.ftl</result>
+                <result name="upm" type="redirect">/plugins/servlet/upm</result>
+            </action>
+            <action name="attributemappingconfig" class="com.miniorange.oauth.bamboo.action.MoOAuthAttributeMappingAction">
+                <interceptor-ref name="defaultStack" />
+                <result name="input" type="freemarker">/templates/attributemappingconfig.ftl</result>
+                <result name="success" type="freemarker">/templates/attributemappingconfig.ftl</result>
+                <result name="upm" type="redirect">/plugins/servlet/upm</result>
+            </action>
+            <action name="signinsettings" class="com.miniorange.oauth.bamboo.action.MoOAuthSignInSettingsAction">
+                <interceptor-ref name="defaultStack" />
+                <result name="input" type="freemarker">/templates/signinoptions.ftl</result>
+                <result name="success" type="freemarker">/templates/signinoptions.ftl</result>
+                <result name="upm" type="redirect">/plugins/servlet/upm</result>
+            </action>
+            <action name="contactus" class="com.miniorange.oauth.bamboo.action.MoOAuthSignInSettingsAction">
+                <interceptor-ref name="defaultStack" />
+                <result name="input" type="freemarker">/templates/contactus.ftl</result>
+                <result name="success" type="freemarker">/templates/contactus.ftl</result>
+                <result name="upm" type="redirect">/plugins/servlet/upm</result>
+            </action>
+            <action name="userdirectoryinfo" class="com.miniorange.oauth.bamboo.action.MoUserDirectoryInfoAction">
+                <interceptor-ref name="defaultStack" />
+                <result name="input" type="freemarker">/templates/userdirectoryinfo.ftl</result>
+                <result name="success" type="freemarker">/templates/userdirectoryinfo.ftl</result>
+                <result name="upm" type="redirect">/plugins/servlet/upm</result>
+            </action>
+        </package>
+    </xwork>
+
+    <!--Components-->
+    <component i18n-name-key="oauth.plugin.settings" key="oauth.plugin.settings" name="OAuth Client Plugin Settings" class="com.miniorange.oauth.bamboo.MoOAuthSettings" />
+    <component i18n-name-key="oauth.plugin.handler" key="oauth.plugin.handler" name="OAuth Client Plugin Handler" class="com.miniorange.oauth.bamboo.MoOAuthPluginHandler" />
+    <component i18n-name-key="oauth.plugin.manager" key="oauth.plugin.manager" name="OAuth Client Manager" class="com.miniorange.oauth.bamboo.MoOAuthManager" />
+    <component i18n-name-key="oauth.plugin.usermanager" key="oauth.plugin.usermanager" name="OAuth Client User Manager" class="com.miniorange.oauth.bamboo.MoOAuthUserManager" />
+    <component i18n-name-key="oauth.plugin.utils" key="oauth.plugin.utils" name="OAuth Client Plugin Utils" class="com.miniorange.oauth.utils.MoOAuthUtils" />
+    <component-import i18n-name-key="oauth.plugin.settings.factory" key="oauth.plugin.settings.factory" name="Plugin Settings Factory" interface="com.atlassian.sal.api.pluginsettings.PluginSettingsFactory" filter="" />
+    <component-import key="PluginLicenseManager" interface="com.atlassian.upm.api.license.PluginLicenseManager" />
+    <component-import i18n-name-key="oauth.user.manager" key="oauth.user.manager" name="User Manager" interface="com.atlassian.sal.api.user.UserManager" filter="" />
+    <component-import name="Plugin Accessor" key="pluginAccessor" i18n-name-key="oauth.plugin.pluginAccessor" interface="com.atlassian.plugin.PluginAccessor" />
+    <component-import i18n-name-key="oauth.login.uri.provider" key="oauth.login.uri.provider" name="Login URI Provider" interface="com.atlassian.sal.api.auth.LoginUriProvider" filter="" />
+    <component-import i18n-name-key="oauth.user.bambooUserManager" key="oauth.user.bambooUserManager" name="Bamboo User Manager" interface="com.atlassian.bamboo.user.BambooUserManager" filter="" />
+    <component-import i18n-name-key="oauth.bamboo.security.bambooPermissionManager" key="oauth.bamboo.security.bambooPermissionManager" name="Bamboo Permission Manager" interface="com.atlassian.bamboo.security.BambooPermissionManager" filter="" />
+    <component-import i18n-name-key="oauth.plugin.renderer" key="renderer" name="Template Renderer" interface="com.atlassian.templaterenderer.velocity.one.six.VelocityTemplateRenderer" />
+
+    <!-- OAUTH LOGIN Servlets &amp; Filters -->
+    <servlet name="Ajax Action Calls" i18n-name-key="oauth.config.ajaxcallservlet" key="oauth.config.ajaxcallservlet" class="com.miniorange.oauth.bamboo.servlet.MoAjaxCallsServlet">
+        <description key="oauth.config.ajaxcallservlet.desc">This module provides different ajax functions.</description>
+        <url-pattern>/oauth/moapi</url-pattern>
+    </servlet>
+    <servlet name="Get Configuration Servlet" i18n-name-key="oauth.config.servlet" key="oauth.config.servlet" class="com.miniorange.oauth.bamboo.servlet.MoOAuthGetConfigurationServlet">
+        <description key="oauth.config.servlet.desc">This module handles configuration of your
+            OAuth.</description>
+        <url-pattern>/oauth/getconfig</url-pattern>
+    </servlet>
+    <servlet name="Login with OAuth Provider" i18n-name-key="oauth.login" key="oauth.login" class="com.miniorange.oauth.bamboo.servlet.MoOAuthLoginServlet">
+        <description key="oauth.login.desc">This module handles login with your
+            OAuth Provider.</description>
+        <url-pattern>/oauth/auth</url-pattern>
+    </servlet>
+    <servlet name="Get authorization response of OAuth Provider" i18n-name-key="oauth.callback" key="oauth.callback" class="com.miniorange.oauth.bamboo.servlet.MoOAuthCallbackServlet">
+        <description key="oauth.callback.desc">This module handles the authorization response of your
+            OAuth Provider.</description>
+        <url-pattern>/oauth/callback</url-pattern>
+    </servlet>
+    
+    <servlet name="Get authorization response of OAuth Provider in customize callback" i18n-name-key="oauth.customize.callback" key="oauth.customize.callback" class="com.miniorange.oauth.bamboo.servlet.MoOAuthCallbackServlet">
+        <description key="oauth.callback.desc">This module handles the customize callback authorization response of your
+            OAuth Provider.</description>
+        <url-pattern>/oauth/callback/*</url-pattern>
+    </servlet>
+
+    <servlet name="Download App guides" i18n-name-key="oauth.downloadappguides" key="oauth.downloadappguides" class="com.miniorange.oauth.bamboo.servlet.MoOAuthDownloadAppGuidesServlet">
+        <description key="oauth.downloadappguides.desc">This module handles download of setup guides.</description>
+        <url-pattern>/oauth/downloadappguides</url-pattern>
+    </servlet>
+    <servlet name="Create Bamboo User" i18n-name-key="oauth.create.user" key="oauth.create.user" class="com.miniorange.oauth.bamboo.servlet.MoOAuthCreateUserServlet">
+        <description key="oauth.create.user.desc">This Module creates a new user after SSO</description>
+        <url-pattern>/oauth/createuser</url-pattern>
+    </servlet>
+
+    <servlet name="Reset Plugin Settings" i18n-name-key="oauth.config.resetpluginsettings" key="oauth.config.resetpluginsettings" class="com.miniorange.oauth.bamboo.servlet.MoOAuthResetSettingsServlet">
+        <description key="oauth.config.resetpluginsettings.desc">This module allows you to clear plugin settings.
+        </description>
+        <url-pattern>/bamboo-oauth/moconfreset</url-pattern>
+    </servlet>
+    <servlet name="downloadconfigurations" i18n-name-key="oauth.config.downloadconfigurations" key="oauth.config.downloadconfigurations" class="com.miniorange.oauth.bamboo.servlet.MoOAuthDownloadConfigurationsServlet">
+        <description key="oauth.config.downloadconfigurations.desc">This module handles Export of your plugin configuration.
+        </description>
+        <url-pattern>/bamboo-oauth/downloadconfigurations</url-pattern>
+    </servlet>
+    <servlet name="uploadconfigurations" i18n-name-key="oauth.config.uploadconfigurations" key="oauth.config.uploadconfigurations" class="com.miniorange.oauth.bamboo.servlet.MoOAuthUploadConfigurationsServlet">
+        <description key="oauth.config.uploadconfigurations.desc">This module handles Import of your plugin configuration.
+        </description>
+        <url-pattern>/bamboo-oauth/uploadconfigurations</url-pattern>
+    </servlet>
+    <servlet name="Configure Plugin URl" i18n-name-key="oauth.config.configureplugin" key="oauth.config.configureplugin" class="com.miniorange.oauth.bamboo.servlet.MoConfigurePlugin">
+        <description key="oauth.config.configureplugin.desc">This module allows to configure plugin with REST API </description>
+        <url-pattern>/oauth/configureplugin</url-pattern>
+    </servlet>
+    <servlet name="Enable Backdoor URl" i18n-name-key="oauth.config.enablebackdoorurl" key="oauth.config.enablebackdoorurl"
+             class="com.miniorange.oauth.bamboo.servlet.MoEnableBackdoorUrl">
+        <description key="oauth.config.enablebackdoorurl.desc">This module allows you to enable Backdoor URL.
+        </description>
+        <url-pattern>/oauth/enablebackdoorurl</url-pattern>
+    </servlet>
+    <component i18n-name-key="oauth.pluginconfigurations.handler" key="oauth.pluginconfigurations.handler"
+               name="Plugin Configurations Handler" class="com.miniorange.oauth.bamboo.MoOAuthPluginConfigurationsHandler">
+        <description>Used to import, export and reset plugin configurations</description>
+    </component>
+
+    <servlet-filter name="OAuth SSO Filter" key="oauth-logout-filter" location="before-dispatch" class="com.miniorange.oauth.bamboo.servlet.MoOAuthLogoutFilter" weight="0">
+        <description>
+            Force users to redirect to the custom logout page/URL after successful logout from the system.
+        </description>
+        <url-pattern>/userLogout.jsp</url-pattern>
+        <url-pattern>/userLogout.action</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </servlet-filter>
+
+    <servlet-filter name="OAuth SSO Filter" key="oauth-redirect"
+                    location="before-login"
+                    class="com.miniorange.oauth.bamboo.servlet.MoOAuthRedirectFilter"
+                    weight="0">
+        <description>
+            Force users to redirect to the idp if auto redirect is on.
+        </description>
+        <url-pattern>/userlogin!doDefault.action</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </servlet-filter>
+</atlassian-plugin>

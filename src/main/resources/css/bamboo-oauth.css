@@ -1,0 +1,123 @@
+#wrapper {
+    display:inline;
+    text-align:center;
+    line-height: 200%;
+}
+.col1{
+    width:40%;
+    border-radius: 15px;
+    border: 2px solid #73AD21;
+    padding: 15px;
+    margin:0px 4px 0px 4px;
+    display: inline-grid;
+}
+
+.col2{
+    width:25%;
+    border-radius: 15px;
+    border: 2px solid #73AD21;
+    padding: 15px;
+    margin:0px 4px 0px 4px;
+    display: grid;
+}
+
+hr.gradient-hr {
+    border: 0;
+    height: 1px;
+    background-image: -webkit-linear-gradient(left, #f0f0f0, #8c8b8b, #f0f0f0);
+    background-image: -moz-linear-gradient(left, #f0f0f0, #8c8b8b, #f0f0f0);
+    background-image: -ms-linear-gradient(left, #f0f0f0, #8c8b8b, #f0f0f0);
+    background-image: -o-linear-gradient(left, #f0f0f0, #8c8b8b, #f0f0f0);
+}
+hr.header{
+    border: 0;
+    height: 1px;
+    background-color: rgba(128, 128, 128, 0.38);
+}
+
+/* The switch - the box around the slider */
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 48px;
+    height: 22px;
+}
+
+.small {
+    position: relative;
+    display: inline-block;
+    width: 30px !important;
+    height: 17px !important;
+    border-radius: 17px !important;
+}
+
+.switch input {
+    display: none;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.small:before {
+    position: absolute;
+    content: "";
+    height: 13px !important;
+    width: 13px !important;
+    left: 2px !important;
+    bottom: 2px !important;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+input:checked+.slider {
+    background-color: #2196F3;
+}
+
+input:focus+.slider {
+    box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked+.slider:before {
+    -webkit-transform: translateX(22px);
+    -ms-transform: translateX(22px);
+    transform: translateX(22px);
+}
+
+input:checked+.small:before {
+    -webkit-transform: translateX(13px) !important;
+    -ms-transform: translateX(13px) !important;
+    transform: translateX(13px) !important;
+}
+
+/* Rounded sliders */
+
+.slider.round {
+    border-radius: 22px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
