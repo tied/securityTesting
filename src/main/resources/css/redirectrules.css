@@ -1,0 +1,55 @@
+h2 .aui-button{
+    vertical-align:top !important;
+}
+
+table.aui thead tr th{
+    font-size:medium;
+}
+
+#redirection-rules-description{
+    min-height:4em;
+    margin-bottom:30px;
+    margin-top:30px;
+}
+
+#jsd-rules{
+    margin-top:50px;
+}
+
+hr{
+    margin-bottom:15px;
+}
+
+.header.subsection{
+    height: 3px;
+    background-color: #0065ff;
+}
+
+.rule-label{
+    text-align: right;
+    padding-right: 10px;
+}
+
+.saved-message{
+    float: right;
+    color: #006400;
+    margin-right: 20%;
+}
+
+table.aui.aui-table-list tbody tr {
+    line-height: 30px;
+}
+
+h2.subsection{
+    margin-top: 5%;
+}
+
+.order-spinner{
+    float: right;
+    display: none;
+    margin-right: 20%
+}
+
+#cancel-create-rule{
+    cursor: pointer;
+}

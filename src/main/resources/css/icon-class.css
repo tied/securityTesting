@@ -1,0 +1,14 @@
+.idp-settings-icon{
+    background-image: url("idp-settings-icon.svg");
+}
+.login-settings-icon{
+    background-image: url("login-settings-icon.svg");
+}
+
+.backup-and-restore-icon{
+    background-image: url("backup-and-restore-icon.svg");
+}
+
+.troubleshooting-icon{
+    background-image: url("troubleshooting-icon.svg");
+}

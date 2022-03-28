@@ -1,0 +1,32 @@
+/* Style the header */
+.helpButton {
+  padding: 10px 16px;
+  background: rgb(0, 82, 204);
+  font-weight: 600;
+  text-align: center;
+  width: auto;
+  border-radius: 20px;
+  font-family:-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+/* The sticky class is added to the header with JS when it reaches its scroll position */
+.sticky {
+    color: white;
+    border-radius: 50px;
+    padding: 12px 25px;
+    background-color: #0052cc;
+    position: fixed;
+    right: 20px;
+    bottom: 50px;
+    font-size: 16px !important ;
+    font-weight: 600;
+    font-family:-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+    z-index: 1;
+}
+.contact-us {
+        background: #fff;
+        padding-top: 1em;
+        padding-left: 1em;
+        padding-right: 1em;
+        padding-bottom: 1em;
+        box-shadow: 0 5px 18px 3px rgba(0,0,0,.1);
+    }

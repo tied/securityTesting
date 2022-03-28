@@ -1,0 +1,13 @@
+.container {
+    border-radius: 5px;
+    padding: 20px;
+    height: 530px;
+    width: 700px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    margin: 0 0 20px 0;
+    overflow-x: auto;
+    overflow-y: auto;
+}
+.b{
+     font-weight: 600;
+ }

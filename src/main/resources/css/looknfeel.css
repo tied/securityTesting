@@ -1,0 +1,40 @@
+.show-box
+{
+     border: 1px solid grey;
+     border-radius: 5px;
+     padding: 7px;
+     background-color: #d3d3d366 ;
+     max-width: 100%;
+}
+.mo-table
+{
+    display: table;
+     border-collapse: separate;
+    box-sizing: border-box;
+    border-spacing: 2px;
+    border-color: grey;
+    width:57%;
+}
+
+.td-copy-button{
+    float: right;
+}
+
+.td-show-box{
+    width:90%
+}
+
+.copy-title:after {
+    content: attr(title);
+    font-weight: bold;
+    color: white;
+    border-radius: 2px;
+    border: 1px solid #2D4D4D;
+    background: #2D4D4D;
+}
+
+.mo-label{
+    color: #6b778c;
+    font-size: 14px;
+    font-weight: 500;
+}

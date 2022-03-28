@@ -1,0 +1,50 @@
+.select2-result.optInvisible {
+    display: none;
+}
+
+.setup-container {
+    cursor: pointer;
+    width: 100%;
+    height: 100px;
+    border-width: 2px;
+    border-radius: 4px;
+    border-style: solid;
+    border-color: #dbdbdb;
+    background-color: #FFFFFF;
+}
+
+#quick-setup-container:hover, #manual-setup-container:hover {
+    cursor: pointer;
+    border-color: #2196F3;
+    background-color: #E1E1E1;
+}
+
+.setup-icon {
+    height: 75px;
+    width: 80px;
+    vertical-align: initial;
+    padding-right: 20px;
+    padding-left: 10px;
+    float: left;
+    padding-top: 10px;
+}
+
+.continue-close-button{
+    border-radius: 50px;
+    border-width: 0px;
+    color : grey;
+    background-color: #FFFFFF;
+}
+
+.description {
+    margin-left: 0px;
+    padding: 10px 5px;
+}
+
+.continue-setup-div {
+    display: inline;
+    background-color: transparent;
+    padding: 8px;
+    padding-right: 0px;
+    border-radius: 4px;
+}

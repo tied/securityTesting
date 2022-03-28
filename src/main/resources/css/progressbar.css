@@ -1,0 +1,91 @@
+.show-title:after {
+    content: attr(title);
+    font-weight: bold;
+    color: white;
+    padding: 5px 10px;
+    margin-left: 20px;
+    border-radius: 2px;
+    border: 1px solid #2D4D4D;
+    background: #2D4D4D;
+}
+
+.progress {
+    width: 100%;
+    text-align: center;
+    display: inline-block;
+    margin-left: -10px;
+    border: black;
+    padding: 10px;
+    height: inherit;
+}
+
+.progress .circle, .progress .bar {
+    position: relative;
+    display: inline-block;
+    background: #fff;
+    width: 35px;
+    height: 35px;
+    border-radius: 40px;
+    border: 1px solid #d5d5da;
+    margin-top: 5px;
+    margin-right: 80px;
+}
+
+.progress .circle:not(:last-child) {
+    margin-right: 80px;
+    margin-bottom: 50px
+}
+
+.progress .bar {
+    position: absolute;
+    width: 3px;
+    height: 85px;
+    top: 30px;
+    left: 17px;
+    border-left: none;
+    border-right: none;
+    border-radius: 0
+}
+
+.progress .circle .label {
+    display: inline-block;
+    width: 35px;
+    height: 35px;
+    line-height: 32px;
+    border-radius: 32px;
+    color: #b5b5ba;
+    font-size: 17px
+}
+
+.progress .circle .title {
+    display: block;
+    color: #b5b5ba;
+    font-size: 13px;
+    line-height: 30px;
+    width: 200px;
+    margin-left: 50px;
+    text-align: left;
+    margin-top: -30px
+}
+
+.progress .done .bar, .progress .circle.done {
+    background: #8bc435
+}
+
+.progress .circle.done .label {
+    color: #FFF;
+    background: #8bc435
+}
+
+.progress .circle.done .title {
+    color: #444
+}
+
+.progress .circle.active .label {
+    color: #0c95be;
+    background: #FFF
+}
+
+.progress .circle.active .title {
+    color: #0c95be
+}
