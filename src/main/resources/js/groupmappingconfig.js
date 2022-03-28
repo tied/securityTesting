@@ -25,9 +25,9 @@ AJS.$(function () {
     });
 
     AJS.$("#test-group-regex").click(function () {
-        var osDestination = "testgroupregex";
+        var osDestination = "testgroupregexcreate";
         var value=AJS.$("#testGroupRegex").val();
-        var testUrl = AJS.contextPath() + '/plugins/servlet/saml/auth';
+        var testUrl = AJS.contextPath() + '/plugins/servlet/oauth/auth';
         testUrl += "?return_to=" + encodeURIComponent(osDestination) + "&regexp=" +
         encodeURIComponent(AJS.$("#regexPatternForGroup").val())+"&regexg="+
         encodeURIComponent(AJS.$("#regexGroups").val())+"&groupName="+
@@ -99,8 +99,9 @@ function toggleOnTheFlyGroupMapping() {
 		AJS.$("#on-the-fly-group-mapping-main-inst").hide();
 		AJS.$("#groupMappingDiv").show();
 		AJS.$("#group-mapping-main-inst").show()
+		AJS.$("#onTheFlyGroupRegexDiv").hide()
 		AJS.$("#onTheFlyDoNotRemoveGroupsDiv").hide();
-		AJS.$("#onTheFlyGroupRegexDiv").hide();
+
 		AJS.$("#roleAttribute").prop("required", false);
 		AJS.$("#onTheFlyGroupCreation").val(false);
 	} else {
@@ -110,7 +111,6 @@ function toggleOnTheFlyGroupMapping() {
 		AJS.$("#onTheFlyAssignNewGroupsOnlyDiv").show();
 		AJS.$("#onTheFlyGroupMappingDiv").show();
 		AJS.$("#onTheFlyCreateNewGroupsDiv").show();
-		AJS.$("#onTheFlyGroupRegexDiv").show();
 		AJS.$("#on-the-fly-group-mapping-main-inst").show();
 		if(AJS.$("#onTheFlyAssignNewGroupsOnly").is(":checked") ==false)
 	    {
@@ -119,6 +119,7 @@ function toggleOnTheFlyGroupMapping() {
 
 		AJS.$("#roleAttribute").prop("required", true);
 		AJS.$("#onTheFlyGroupCreation").val(true);
+		AJS.$("#onTheFlyGroupRegexDiv").show()
 
 	}
 }

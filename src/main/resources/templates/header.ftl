@@ -1,102 +1,160 @@
-<a href="https://miniorange.atlassian.net/servicedesk/customer/portal/2/group/6/create/15" target="_blank"><div class="header" id="Help_Button">miniOrange Support
-</div></a>
-
-<script>
-    <#if (action.hasActionMessages())>
-        <#foreach actionMessage in action.actionMessages>
-            AJS.flag({
-                title: 'Success!',
-                type: 'success',
-                close: 'auto',
-                body: '<p>${actionMessage}</p><br/>'
-            });
-        </#foreach>
-    </#if>
-    <#if action.hasActionErrors() >
-        <#foreach error in action.actionErrors >
-            AJS.flag({
-                title: 'Error!',
-                type: 'error',
-                close : 'auto',
-                body: '<p>${error}</p><br/>'
-            });
-        </#foreach>
-    </#if>
-
-</script>
 <style>
-    <#include "/css/bamboo-sso.css">
-    #include("/css/pluginPages.css");
+    .feedback_float {
+        cursor: pointer;
+        transform: rotate(-90deg);
+        padding: 15px;
+        position: fixed;
+        width: auto;
+        height: auto;
+        top: 340px;
+        right: -25px;
+        color: #FFF;
+        background: chocolate;
+        text-align: center;
+        border-radius: 8px;
+        border-width: 0px;
+        z-index: 10000;
+    }
+
+    .feedback_panel {
+        background-color: #fff;
+        display: inline-block;
+        height: auto;
+        position: fixed;
+        top: 125px;
+        width: 320px;
+        float: right;
+        height: auto;
+        min-height: 459px;
+        right: -335px;
+        z-index: 10000;
+        border-radius: 8px;
+        border-style: groove;
+    }
+
+    .form-element {
+        background-color: #f4f5f7;
+        border-radius: 5px;
+        border: 1px solid #dfe1e6;
+        box-shadow: none;
+        box-sizing: border-box;
+        color: #172b4d;
+        font-family: inherit;
+        font-size: 14px;
+        line-height: 20px;
+        max-width: 100%;
+        outline: none;
+        padding: 9px 7px;
+        transition: background-color .2s ease-in-out, border-color .2s ease-in-out;
+        width: 100%;
+    }
+
+    #widget-header {
+        border-radius: 5px 5px 0 0;
+        height: 40px;
+        max-height: 40px;
+        min-height: 40px;
+        display: flex;
+        align-items: center;
+        background-color: #0052cc;
+        position: relative;
+    }
+
+    #widget-header .header-text, .header-close-icon-container {
+        color: #fff;
+        padding: 10px;
+        display: inline-block;
+        white-space: nowrap;
+        overflow: hidden;
+        flex-grow: 1;
+        text-overflow: ellipsis;
+        text-align: center;
+    }
+
+    .background.diamond {
+        font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Noto Sans, Oxygen, Ubuntu, Droid Sans, Helvetica Neue, sans-serif;
+    }
+
+    .form-labels {
+        color: #6b778c;
+        display: block;
+        font-size: 12px;
+        font-weight: 600;
+        line-height: 1;
+        padding: 0;
+        margin-bottom: 6px;
+        font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Noto Sans, Oxygen, Ubuntu, Droid Sans, Helvetica Neue, sans-serif;
+    }
 </style>
-
-<script>
-    <#include "/js/newFeatures.js">
-    <#include "/js/pluginUtilities.js">
-</script>
-
-<header class="aui-page-header" style="background-color:#f5f5f5 !important; margin:-21px -20px 0px -20px; padding:0px 10px 10px 20px;">
-    <div class="aui-page-header-inner" style="width:70%;">
-        <div class="aui-page-header-image">
-            <span class="aui-avatar aui-avatar-large">
-                <span class="aui-avatar-inner">
-                    <img src="${req.contextPath}/rest/plugins/1.0/com.miniorange.sso.saml.bamboo-sso-key/media/plugin-logo">
-                </span>
-            </span>
-        </div>
-        <div class="aui-page-header-main">
-            <h1>miniOrange SAML Single Sign-On Configuration</h1>
-            <div class="aui-buttons">
-                <a href="${req.contextPath}/plugins/servlet/upm" target="_blank" class="aui-button aui-button-subtle" style="color:blue">
-                    <span class="aui-icon aui-icon-small aui-iconfont-addon" style="color: blue;vertical-align: middle"></span>
-                    <span style="vertical-align:middle">Manage apps</span></a>
-                <a href="https://forum.miniorange.com/forums/forum/single-sign-on/single-sign-on/" target="_blank" class="aui-button aui-button-subtle" style="color:blue">
-                    <span class="aui-icon aui-icon-small aui-iconfont-vid-raised-hand" style="color: blue;vertical-align: middle"></span>
-                    <span style="vertical-align:middle">Ask Us On Forum</span></a>
-                <a href="https://faq.miniorange.com/kb/atlassian/" target="_blank" class="aui-button aui-button-subtle" style="color: blue">
-                    <span class="aui-icon aui-icon-small aui-iconfont-question-circle" style="color:blue;vertical-align: middle"></span>
-                    <span style="vertical-align:middle">&nbsp;Frequently Asked Questions</span></a>
-                <a href="https://miniorange.atlassian.net/servicedesk/customer/portal/2/group/6/create/66" target="_blank" class="aui-button aui-button-subtle" style="color: blue">
-                    <span class="aui-icon aui-icon-small aui-iconfont-video-filled" style="color:blue;vertical-align: middle"></span>
-                    <span style="vertical-align:middle">&nbsp;Request a Demo</span></a>&emsp;
-
-
-            </div>
-        </div>
-    </div>
-    <div style="float:right; margin-right:20px; margin-top:-60px;">
-        <div class="contact-us" id="contact-us" aria-controls="support_div_dialog">
-            <div class="contact-us-heading">
-                <h3> Contact us:</h3>
-                <div>
-                    <ul style="list-style-type:none; padding-left: 0;">
-                        <li>
-                            <span class="aui-icon aui-icon-small aui-iconfont-email">Contact-us email</span>
-                            <span><a href="mailto:atlassiansupport@xecurify.com">atlassiansupport@xecurify.com</a></span>
-                        </li>
-                        <li>
-                            <span class="aui-icon aui-icon-small aui-iconfont-vid-hang-up">Contact-us phone</span>
-                            <span>+1 978 658 9387</span>
-                        </li>
-                    </ul>
+<div class="aui-page-panel">
+    <div class="aui-page-panel-inner">
+        <section id="content" role="main">
+            <header class="aui-page-header" style="background-color:#f5f5f5 !important;">
+                <div class="aui-page-header-inner">
+                    <div class="aui-page-header-image">
+                    	<span class="aui-avatar aui-avatar-large">
+                        	<span class="aui-avatar-inner">
+                            	<img src="/rest/plugins/1.0/com.miniorange.oauth.bamboo-oauth-key/media/plugin-logo">
+                        	</span>
+                    	</span>
+                    </div>
+                    <div class="aui-page-header-main">
+                        <h1>miniOrange OAuth Configuration</h1>
+                        <div class="aui-buttons">
+                            <a href="/plugins/servlet/upm" target="_blank" class="aui-button aui-button-subtle" style="color:blue"><span class="aui-icon aui-icon-small aui-iconfont-addon" style="color: blue;vertical-align: middle"></span><span style="vertical-align:middle">Manage apps</span></a>
+                            <a href="https://forum.miniorange.com/forums/forum/single-sign-on/single-sign-on/" target="_blank" class="aui-button aui-button-subtle" style="color:blue"><span class="aui-icon aui-icon-small aui-iconfont-vid-raised-hand" style="color: blue;vertical-align: middle"></span><span style="vertical-align:middle">Ask Us On Forum</span></a>
+                        	<a href="https://faq.miniorange.com/kb/atlassian/" target="_blank" class="aui-button aui-button-subtle" style="color: blue"><span class="aui-icon aui-icon-small aui-iconfont-question-circle" style="color:blue;vertical-align: middle"></span><span style="vertical-align:middle">&nbsp;Frequently Asked Questions</span></a>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-    </div>
-    <br>
-    <nav id="main-navigation-heading" class="aui-navgroup aui-navgroup-horizontal" style="margin:-10px;">
-        <div class="aui-navgroup-inner">
-            <div class="aui-navgroup-primary">
-                <div id="mo-navigation-links" class="mo-navigation-links">
-                    <ul class="aui-nav" resolved="">
-                        <li id="mo-saml">
-                            <a href="listidp.action"><span>SAML</span></a>
-                        </li>
-                        <li id="mo-headerbasedauth">
-                            <a href="headerbasedauth.action"><span>Header Authentication</span></a>
-                        </li>
-                    </ul>
+            </header>
+            <script data-jsd-embedded data-key="5c807c59-f240-4b09-8425-b0284714e5e1" data-base-url="https://embedded-jsd.atlassian.io" src="https://embedded-jsd.atlassian.io/assets/embed.js"></script>
+            <nav class="aui-navgroup aui-navgroup-horizontal" id="min_topmenu">
+                <div class="aui-navgroup-inner">
+                    <div class="aui-navgroup-primary">
+                        <ul class="aui-nav">
+                            <li id="configureoauth"><a href="configure.action">Configure OAuth</a></li>
+                            <li id="userprofile"><a href="attributemappingconfig.action">User Profile</a></li>
+                            <li id="usergroups"><a href="groupmappingconfig.action">User Groups</a></li>
+                            <li id="signinsettings"><a href="signinsettings.action">Sign In Settings</a></li>
+                            <li id="importexport"><a href="importexport.action">Backup/Restore Configurations</a></li>
+                        </ul>
+                    </div>
+                    <span style="float:right;margin-right:25px;margin-top: 4px;">
+                            <a href="contactus.action"><input type="button" class="aui-button aui-button-primary" value="Troubleshooting"></a>
+                     </span>
                 </div>
-            </div>
-        </div>
-    </nav>
-</header>
+            </nav>
+            
+            <div class="aui-tabs horizontal-tabs" id="tabs-example1" role="application">
+				<#if ( !settings.isLicenseDefine() )>
+				<div class="aui-message aui-message-warning warning closeable shadowed">
+                    <p class="title">
+                        <strong>Warning!</strong>
+                    </p>
+                    <p>No license found for app. Single Sign-On will not work unless app license is applied.</p>
+                    <p>If you've already generated a license
+                        <a href="https://my.atlassian.com/product" target="_blank">click here</a> to access it and update it in License key box on
+                        <a href="/plugins/servlet/upm" target="_blank">
+                            <b>Manage apps</b>
+                        </a> page.
+                    </p>
+                </div>
+                </#if>
+
+				<#if ( action.hasActionMessages() )>
+				<div class="aui-message aui-message-success success closeable shadowed">
+					<#foreach actionMessage in action.actionMessages >
+                        <p>${actionMessage}</p>
+                    </#foreach>
+                </div>
+                </#if>
+				<#if ( action.hasActionErrors() )>
+				<div class="aui-message closeable error config_form_error">
+					<#foreach actionError in action.actionErrors >
+                        <p>${actionError} </p>
+                    </#foreach>
+                </div>
+                </#if>
+
+                

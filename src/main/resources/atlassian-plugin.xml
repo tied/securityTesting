@@ -1,487 +1,195 @@
-<atlassian-plugin key="${atlassian.plugin.key}" name="${project.name}"
-	plugins-version="2">
-	<plugin-info>
-		<description>${project.description}</description>
-		<version>${project.version}</version>
-		<vendor name="${project.organization.name}" url="${project.organization.url}" />
+<atlassian-plugin key="${atlassian.plugin.key}" name="${project.name}" plugins-version="2">
+    <plugin-info>
+        <description>${project.description}</description>
+        <version>${project.version}</version>
+        <vendor name="${project.organization.name}" url="${project.organization.url}" />
+        <param name="atlassian-data-center-compatible">true</param>
         <param name="atlassian-licensing-enabled">true</param>
-		<param name="plugin-icon">images/pluginIcon.png</param>
-		<param name="plugin-logo">images/pluginLogo.png</param>
-		<param name="configure.url">/plugins/servlet/bamboo-sso/configure.action</param>
-	</plugin-info>
+        <param name="plugin-icon">images/pluginIcon.png</param>
+        <param name="plugin-logo">images/pluginLogo.png</param>
+        <param name="configure.url">/plugins/servlet/bamboo-oauth/configure.action</param>
+    </plugin-info>
 
-	<!-- add our i18n resource -->
-	<resource type="i18n" name="i18n" location="bamboo-sso" />
+    <!-- add our i18n resource -->
+    <resource type="i18n" name="i18n" location="bamboo-oauth" />
 
-	<!-- add our web resources -->
-	<web-resource key="samlsso.plugin.auth.resources"
-		i18n-name-key="samlsso.plugin.auth.resources" name="Authentication Resources">
-		<dependency>com.atlassian.auiplugin:ajs</dependency>
-        <dependency>com.atlassian.auiplugin:aui-select2</dependency>
-        <dependency>com.atlassian.auiplugin:aui-toggle</dependency>
-        <dependency>com.atlassian.auiplugin:aui-icon</dependency>
-        <dependency>com.atlassian.auiplugin:dialog2</dependency>
-        <dependency>com.atlassian.auiplugin:aui-flag</dependency>
-        <dependency>com.atlassian.auiplugin:aui-iconography</dependency>
-        <dependency>com.atlassian.auiplugin:aui-lozenge</dependency>
-        <dependency>com.atlassian.auiplugin:aui-spinner</dependency>
-        <dependency>com.atlassian.auiplugin:aui-expander</dependency>
-        <dependency>com.atlassian.auiplugin:aui-select</dependency>
-        <resource name="miniorange-constants.js" type="download" location="js/miniorange-constants.js" />
-        <resource name="customcerts.js" type="download" location="js/customcerts.js" />
-        <resource name="bamboo-sso.css" type="download" location="css/bamboo-sso.css" />
-        <resource name="utility.js" type="download" location="js/utility.js" />
-        <resource name="ajaxCalls.js" type="download" location="js/ajaxCalls.js" />
-        <resource name="process-redirect-rules.js" type="download" location="/js/process-redirect-rules.js" />
-        <resource name="bamboo-sso.js" type="download" location="js/bamboo-sso.js" />
+    <!-- add our web resources -->
+
+    <web-resource key="oauth.plugin.auth.resources" i18n-name-key="oauth.plugin.auth.resources" name="Authentication Resources">
+        <dependency>com.atlassian.auiplugin:ajs</dependency>
+        <resource name="yt_icon/" location="/images" type="download"/>
+        <resource name="bamboo-oauth.js" type="download" location="/js/bamboo-oauth.js" />
+        <resource type="download" name="bamboo-oauth.css" location="/css/bamboo-oauth.css" />
         <context>atl.general</context>
-	</web-resource>
-
-
-	<web-resource key="bamboo-sso-resources" name="Bamboo-sso Web Resources">
-		<dependency>com.atlassian.auiplugin:ajs</dependency>
-        <dependency>com.atlassian.auiplugin:aui-flag</dependency>
-
-        <resource name="miniorange-constants.js" type="download" location="js/miniorange-constants.js" />
-        <resource name="utility.js" type="download" location="js/utility.js" />
-        <resource name="ajaxCalls.js" type="download" location="js/ajaxCalls.js" />
-        <resource name="process-redirect-rules.js" type="download" location="js/process-redirect-rules.js" />
-		<resource type="download" name="bamboo-sso.css" location="css/bamboo-sso.css" />
-        <resource name="customcerts.js" type="download" location="js/customcerts.js" />
-        <resource type="download" name="bamboo-sso.js" location="js/bamboo-sso.js" />
-		<resource type="download" name="images/" location="/images" />
-		<context>atl.admin</context>
-	</web-resource>
-
-    <web-resource name="Plugin Images" key="samlsso.plugin.images.resource" i18n-name-key="samlsso.plugin.images.resource">
-        <resource name="images/" location="/images/idpimages" type="download"/>
-        <context>idpimages</context>
     </web-resource>
 
-    <web-resource name="Setup Icons" key="samlsso.plugin.icons.resource" i18n-name-key="samlsso.plugin.icons.resource">
-        <resource name="images/" location="/images/setupicons" type="download"/>
-        <context>setupicons</context>
+    <web-resource key="bamboo-oauth-resources" name="bamboo-oauth Web Resources">
+        <dependency>com.atlassian.auiplugin:ajs</dependency>
+
+        <resource type="download" name="bamboo-oauth.css" location="/css/bamboo-oauth.css" />
+        <resource type="download" name="bamboo-oauth.js" location="/js/bamboo-oauth.js" />
+        <resource type="download" name="images/" location="/images" />
+        <context>atl.admin</context>
     </web-resource>
 
-	<web-item name="SAML SSO Configuration Menu" i18n-name-key="samlsso.config.menu"
-		key="samlsso.config.menu" section="system.admin/security"
-		weight="150" application="bamboo">
-		<description key="samlsso.config.menu.desc">This display menu item for configuring
-			the plugin in System settings
-			under Security.
-		</description>
-		<label key="samlsso.config.menu.lable">miniOrange SAML SSO Configuration</label>
-		<link linkId="samlsso.config.menu.link">/plugins/servlet/bamboo-sso/configure.action</link>
-	</web-item>
+    <web-item name="OAuth SSO Configuration Menu" i18n-name-key="oauthsso.config.menu" key="oauthsso.config.menu" section="system.admin/security" weight="150" application="bamboo">
+        <description key="oauth.config.menu.desc">This display menu item for configuring
+            the plugin in System settings under Security.
+        </description>
+        <label key="oauth.config.menu.lable">miniOrange OAuth SSO Configuration</label>
+        <link linkId="oauth.config.menu.link">/plugins/servlet/bamboo-oauth/configure.action</link>
+    </web-item>
 
-	<!-- Action Mapping -->
+    <!-- Action Mapping -->
 
-	<xwork name="XWork Actions" key="saml2-configure-xwork">
-        <package name="Saml2 configuration package" extends="default" namespace="/plugins/servlet/bamboo-sso">     
-			
-			 <action name="configure" class="com.miniorange.sso.saml.bamboo.action.MoIdpListAction">
-                 <interceptor-ref name="defaultStack"/>
-                 <result name="input" type="freemarker">/templates/saml/listidp.ftl</result>
-                 <result name="success" type="freemarker">/templates/saml/listidp.ftl</result>
-                 <result name="upm" type="redirect">/plugins/servlet/upm</result>
-            </action>
+    <xwork name="XWork Actions" key="oauth-configure-xwork">
+        <package name="OAuth configuration package" extends="default" namespace="/plugins/servlet/bamboo-oauth">
 
-            <action name="listidp" class="com.miniorange.sso.saml.bamboo.action.MoIdpListAction">
-                <interceptor-ref name="defaultStack"/>
-                <result name="input" type="freemarker">/templates/saml/listidp.ftl</result>
-                <result name="success" type="freemarker">/templates/saml/listidp.ftl</result>
-                <result name="upm" type="redirect">/plugins/servlet/upm</result>
-            </action>
-
-            <action name="spmetadata" class="com.miniorange.sso.saml.bamboo.action.MoSpConfigurationAction">
-                <interceptor-ref name="defaultStack"/>
-                <result name="input" type="freemarker">/templates/saml/spmetadata.ftl</result>
-                <result name="success" type="freemarker">/templates/saml/spmetadata.ftl</result>
-                <result name="upm" type="redirect">/plugins/servlet/upm</result>
-            </action>
-
-            <action name="postlogout" class="com.miniorange.sso.saml.bamboo.action.MoPostLogoutRulesAction">
-                <interceptor-ref name="defaultStack"/>
-                <result name="input" type="freemarker">/templates/saml/postlogout.ftl</result>
-                <result name="success" type="freemarker">/templates/saml/postlogout.ftl</result>
-                <result name="upm" type="redirect">/plugins/servlet/upm</result>
-            </action>
-            <action name="headerbasedauth" class="com.miniorange.sso.saml.bamboo.action.MoHeaderBasedAuthAction">
-                <interceptor-ref name="defaultStack"/>
-                <result name="input" type="freemarker">/templates/headerauthentication/headerbasedauth.ftl</result>
-                <result name="success" type="freemarker">/templates/headerauthentication/headerbasedauth.ftl</result>
-                <result name="upm" type="redirect">/plugins/servlet/upm</result>
-            </action>
-            <action name="flowdrivensetup" class="com.miniorange.sso.saml.bamboo.action.MoFlowDrivenSetupAction">
-                <interceptor-ref name="defaultStack"/>
-                <result name="input" type="freemarker">/templates/saml/flowdrivensetup.ftl</result>
-                <result name="success" type="freemarker">/templates/saml/flowdrivensetup.ftl</result>
-                <result name="upm" type="redirect">/plugins/servlet/upm</result>
-            </action>
-            <action name="supportedidps" class="com.miniorange.sso.saml.bamboo.action.MoSupportedIdpsAction">
-                <interceptor-ref name="defaultStack"/>
-                <result name="input" type="freemarker">/templates/saml/supportedidps.ftl</result>
-                <result name="success" type="freemarker">/templates/saml/supportedidps.ftl</result>
-                <result name="upm" type="redirect">/plugins/servlet/upm</result>
-            </action>
-            <action name="sessionmanagement" class="com.miniorange.sso.saml.bamboo.action.MoSessionManagementAction">
-                <interceptor-ref name="defaultStack"/>
-                <result name="input" type="freemarker">/templates/saml/sessionmanagement.ftl</result>
-                <result name="success" type="freemarker">/templates/saml/sessionmanagement.ftl</result>
-                <result name="upm" type="redirect">/plugins/servlet/upm</result>
-            </action>
-            <action name="signinsettings" class="com.miniorange.sso.saml.bamboo.action.MoRedirectionRules">
-                <interceptor-ref name="defaultStack"/>
-                <result name="input" type="freemarker">/templates/saml/redirectiontoggles.ftl</result>
-                <result name="success" type="freemarker">/templates/saml/redirectiontoggles.ftl</result>
-                <result name="upm" type="redirect">/plugins/servlet/upm</result>
-            </action>
-
-            <action name="redirectionrules" class="com.miniorange.sso.saml.bamboo.action.MoRedirectionRules">
-                <interceptor-ref name="defaultStack"/>
-                <result name="input" type="freemarker">/templates/saml/redirectrules.ftl</result>
-                <result name="success" type="freemarker">/templates/saml/redirectrules.ftl</result>
-                <result name="upm" type="redirect">/plugins/servlet/upm</result>
-            </action>
-<!--
-            <action name="deleteidp" class="com.miniorange.sso.saml.bamboo.servlet.MoDeleteIdpServlet">
-                <interceptor-ref name="defaultStack"/>
-                <result name="input" type="freemarker">/templates/com/miniorange/sso/saml/bamboo/listidp.ftl</result>
-            </action>
--->
-
-            <action name="addidp" class="com.miniorange.sso.saml.bamboo.action.MoAddIDPConfigurationAction">
-                 <interceptor-ref name="defaultStack"/>
-                 <result name="input" type="freemarker">/templates/saml/addidp.ftl</result>
-                 <result name="success" type="freemarker">/templates/saml/addidp.ftl</result>
-           		 <result name="upm" type="redirect">/plugins/servlet/upm</result>
-            </action>
-            
-            <action name="attributemappingconfig" class="com.miniorange.sso.saml.bamboo.action.MoAttributeMappingAction">
-                 <interceptor-ref name="defaultStack"/>
-                 <result name="input" type="freemarker">/templates/saml/attributemappingconfig.ftl</result>
-                 <result name="success" type="freemarker">/templates/saml/attributemappingconfig.ftl</result>
-           		 <result name="upm" type="redirect">/plugins/servlet/upm</result>
-            </action>
-            
-            <action name="groupmappingconfig" class="com.miniorange.sso.saml.bamboo.action.MoGroupMappingAction">
-                 <interceptor-ref name="defaultStack"/>
-                 <result name="input" type="freemarker">/templates/saml/groupmappingconfig.ftl</result>
-                 <result name="success" type="freemarker">/templates/saml/groupmappingconfig.ftl</result>
-           		 <result name="upm" type="redirect">/plugins/servlet/upm</result>
-            </action>
-
-            <action name="overview" class="com.miniorange.sso.saml.bamboo.action.MoOverviewAction">
+            <action name="configure" class="com.miniorange.oauth.bamboo.action.MoClientConfigurationAction">
                 <interceptor-ref name="defaultStack" />
-                <result name="input" type="freemarker">/templates/saml/overview.ftl</result>
-                <result name="success" type="freemarker">/templates/saml/overview.ftl</result>
+                <result name="input" type="freemarker">/templates/configure.ftl</result>
+                <result name="success" type="freemarker">/templates/configure.ftl</result>
                 <result name="upm" type="redirect">/plugins/servlet/upm</result>
             </action>
-
-            <action name="advancedsso" class="com.miniorange.sso.saml.bamboo.action.MoAdvancedSSOAction">
+            <action name="groupmappingconfig" class="com.miniorange.oauth.bamboo.action.MoOAuthGroupMappingAction">
                 <interceptor-ref name="defaultStack" />
-                <result name="input" type="freemarker">/templates/saml/advancedsso.ftl</result>
-                <result name="success" type="freemarker">/templates/saml/advancedsso.ftl</result>
+                <result name="input" type="freemarker">/templates/groupmappingconfig.ftl</result>
+                <result name="success" type="freemarker">/templates/groupmappingconfig.ftl</result>
                 <result name="upm" type="redirect">/plugins/servlet/upm</result>
             </action>
-
-            <action name="looknfeel" class="com.miniorange.sso.saml.bamboo.action.MoLooknFeelAction">
+            <action name="importexport" class="com.miniorange.oauth.bamboo.action.MoOAuthImportExportAction">
                 <interceptor-ref name="defaultStack" />
-                <result name="input" type="freemarker">/templates/saml/looknfeel.ftl </result>
-                <result name="success" type="freemarker">/templates/saml/looknfeel.ftl</result>
+                <result name="input" type="freemarker">/templates/importexport.ftl</result>
+                <result name="success" type="freemarker">/templates/importexport.ftl</result>
                 <result name="upm" type="redirect">/plugins/servlet/upm</result>
             </action>
-
-            <action name="globalssosettings" class="com.miniorange.sso.saml.bamboo.action.MoGlobalSSOSettingsAction">
+            <action name="attributemappingconfig" class="com.miniorange.oauth.bamboo.action.MoOAuthAttributeMappingAction">
                 <interceptor-ref name="defaultStack" />
-                <result name="input" type="freemarker">/templates/saml/globalssosettings.ftl</result>
-                <result name="success" type="freemarker">/templates/saml/globalssosettings.ftl</result>
+                <result name="input" type="freemarker">/templates/attributemappingconfig.ftl</result>
+                <result name="success" type="freemarker">/templates/attributemappingconfig.ftl</result>
                 <result name="upm" type="redirect">/plugins/servlet/upm</result>
             </action>
+            <action name="signinsettings" class="com.miniorange.oauth.bamboo.action.MoOAuthSignInSettingsAction">
+                <interceptor-ref name="defaultStack" />
+                <result name="input" type="freemarker">/templates/signinoptions.ftl</result>
+                <result name="success" type="freemarker">/templates/signinoptions.ftl</result>
+                <result name="upm" type="redirect">/plugins/servlet/upm</result>
+            </action>
+            <action name="contactus" class="com.miniorange.oauth.bamboo.action.MoOAuthSignInSettingsAction">
+                <interceptor-ref name="defaultStack" />
+                <result name="input" type="freemarker">/templates/contactus.ftl</result>
+                <result name="success" type="freemarker">/templates/contactus.ftl</result>
+                <result name="upm" type="redirect">/plugins/servlet/upm</result>
+            </action>
+            <action name="userdirectoryinfo" class="com.miniorange.oauth.bamboo.action.MoUserDirectoryInfoAction">
+                <interceptor-ref name="defaultStack" />
+                <result name="input" type="freemarker">/templates/userdirectoryinfo.ftl</result>
+                <result name="success" type="freemarker">/templates/userdirectoryinfo.ftl</result>
+                <result name="upm" type="redirect">/plugins/servlet/upm</result>
+            </action>
+        </package>
+    </xwork>
 
-    <!-- <action name="signinsettings" class="com.miniorange.sso.saml.bamboo.action.MoSignInSettingsAction">
-            <interceptor-ref name="defaultStack"/>
-            <result name="input" type="freemarker">/templates/com/miniorange/sso/saml/bamboo/signinoptions.ftl</result>
-            <result name="success" type="freemarker">/templates/com/miniorange/sso/saml/bamboo/signinoptions.ftl</result>
-            <result name="upm" type="redirect">/plugins/servlet/upm</result>
-       </action>-->
+    <!--Components-->
+    <component i18n-name-key="oauth.plugin.settings" key="oauth.plugin.settings" name="OAuth Client Plugin Settings" class="com.miniorange.oauth.bamboo.MoOAuthSettings" />
+    <component i18n-name-key="oauth.plugin.handler" key="oauth.plugin.handler" name="OAuth Client Plugin Handler" class="com.miniorange.oauth.bamboo.MoOAuthPluginHandler" />
+    <component i18n-name-key="oauth.plugin.manager" key="oauth.plugin.manager" name="OAuth Client Manager" class="com.miniorange.oauth.bamboo.MoOAuthManager" />
+    <component i18n-name-key="oauth.plugin.usermanager" key="oauth.plugin.usermanager" name="OAuth Client User Manager" class="com.miniorange.oauth.bamboo.MoOAuthUserManager" />
+    <component i18n-name-key="oauth.plugin.utils" key="oauth.plugin.utils" name="OAuth Client Plugin Utils" class="com.miniorange.oauth.utils.MoOAuthUtils" />
+    <component-import i18n-name-key="oauth.plugin.settings.factory" key="oauth.plugin.settings.factory" name="Plugin Settings Factory" interface="com.atlassian.sal.api.pluginsettings.PluginSettingsFactory" filter="" />
+    <component-import key="PluginLicenseManager" interface="com.atlassian.upm.api.license.PluginLicenseManager" />
+    <component-import i18n-name-key="oauth.user.manager" key="oauth.user.manager" name="User Manager" interface="com.atlassian.sal.api.user.UserManager" filter="" />
+    <component-import name="Plugin Accessor" key="pluginAccessor" i18n-name-key="oauth.plugin.pluginAccessor" interface="com.atlassian.plugin.PluginAccessor" />
+    <component-import i18n-name-key="oauth.login.uri.provider" key="oauth.login.uri.provider" name="Login URI Provider" interface="com.atlassian.sal.api.auth.LoginUriProvider" filter="" />
+    <component-import i18n-name-key="oauth.user.bambooUserManager" key="oauth.user.bambooUserManager" name="Bamboo User Manager" interface="com.atlassian.bamboo.user.BambooUserManager" filter="" />
+    <component-import i18n-name-key="oauth.bamboo.security.bambooPermissionManager" key="oauth.bamboo.security.bambooPermissionManager" name="Bamboo Permission Manager" interface="com.atlassian.bamboo.security.BambooPermissionManager" filter="" />
+    <component-import i18n-name-key="oauth.plugin.renderer" key="renderer" name="Template Renderer" interface="com.atlassian.templaterenderer.velocity.one.six.VelocityTemplateRenderer" />
 
-       <action name="troubleshooting" class="com.miniorange.sso.saml.bamboo.action.MoTroubleshootingAction">
-           <interceptor-ref name="defaultStack" />
-           <result name="input" type="freemarker">/templates/troubleshooting.ftl</result>
-           <result name="success" type="freemarker">/templates/troubleshooting.ftl</result>
-           <result name="upm" type="redirect">/plugins/servlet/upm</result>
-       </action>
+    <!-- OAUTH LOGIN Servlets &amp; Filters -->
+    <servlet name="Ajax Action Calls" i18n-name-key="oauth.config.ajaxcallservlet" key="oauth.config.ajaxcallservlet" class="com.miniorange.oauth.bamboo.servlet.MoAjaxCallsServlet">
+        <description key="oauth.config.ajaxcallservlet.desc">This module provides different ajax functions.</description>
+        <url-pattern>/oauth/moapi</url-pattern>
+    </servlet>
+    <servlet name="Get Configuration Servlet" i18n-name-key="oauth.config.servlet" key="oauth.config.servlet" class="com.miniorange.oauth.bamboo.servlet.MoOAuthGetConfigurationServlet">
+        <description key="oauth.config.servlet.desc">This module handles configuration of your
+            OAuth.</description>
+        <url-pattern>/oauth/getconfig</url-pattern>
+    </servlet>
+    <servlet name="Login with OAuth Provider" i18n-name-key="oauth.login" key="oauth.login" class="com.miniorange.oauth.bamboo.servlet.MoOAuthLoginServlet">
+        <description key="oauth.login.desc">This module handles login with your
+            OAuth Provider.</description>
+        <url-pattern>/oauth/auth</url-pattern>
+    </servlet>
+    <servlet name="Get authorization response of OAuth Provider" i18n-name-key="oauth.callback" key="oauth.callback" class="com.miniorange.oauth.bamboo.servlet.MoOAuthCallbackServlet">
+        <description key="oauth.callback.desc">This module handles the authorization response of your
+            OAuth Provider.</description>
+        <url-pattern>/oauth/callback</url-pattern>
+    </servlet>
+    
+    <servlet name="Get authorization response of OAuth Provider in customize callback" i18n-name-key="oauth.customize.callback" key="oauth.customize.callback" class="com.miniorange.oauth.bamboo.servlet.MoOAuthCallbackServlet">
+        <description key="oauth.callback.desc">This module handles the customize callback authorization response of your
+            OAuth Provider.</description>
+        <url-pattern>/oauth/callback/*</url-pattern>
+    </servlet>
 
-       <action name="customcerts" class="com.miniorange.sso.saml.bamboo.action.MoCustomCertificatesAction">
-           <interceptor-ref name="defaultStack"/>
-           <result name="input" type="freemarker">/templates/saml/customcerts.ftl</result>
-           <result name="success" type="freemarker">/templates/saml/customcerts.ftl</result>
-           <result name="upm" type="redirect">/plugins/servlet/upm</result>
-       </action>
+    <servlet name="Download App guides" i18n-name-key="oauth.downloadappguides" key="oauth.downloadappguides" class="com.miniorange.oauth.bamboo.servlet.MoOAuthDownloadAppGuidesServlet">
+        <description key="oauth.downloadappguides.desc">This module handles download of setup guides.</description>
+        <url-pattern>/oauth/downloadappguides</url-pattern>
+    </servlet>
+    <servlet name="Create Bamboo User" i18n-name-key="oauth.create.user" key="oauth.create.user" class="com.miniorange.oauth.bamboo.servlet.MoOAuthCreateUserServlet">
+        <description key="oauth.create.user.desc">This Module creates a new user after SSO</description>
+        <url-pattern>/oauth/createuser</url-pattern>
+    </servlet>
 
-       <action name="customtemplates" class="com.miniorange.sso.saml.bamboo.action.MoCustomTemplateAction">
-           <interceptor-ref name="defaultStack"/>
-           <result name="input" type="freemarker">/templates/com/miniorange/sso/saml/bamboo/customtemplates.ftl</result>
-           <result name="success" type="freemarker">/templates/com/miniorange/sso/saml/bamboo/customtemplates.ftl</result>
-           <result name="upm" type="redirect">/plugins/servlet/upm</result>
-       </action>
-
-       <action name="contactus" class="com.miniorange.sso.saml.bamboo.action.MoContactUsAction">
-            <interceptor-ref name="defaultStack"/>
-            <result name="input" type="freemarker">/templates/com/miniorange/sso/saml/bamboo/contactus.ftl</result>
-            <result name="success" type="freemarker">/templates/com/miniorange/sso/saml/bamboo/contactus.ftl</result>
-            <result name="upm" type="redirect">/plugins/servlet/upm</result>
-       </action>
-
-       <action name="downloadcertificate" class="com.miniorange.sso.saml.bamboo.action.MoDownloadCertificateAction" >
-           <view name="input">/templates/com/miniorange/sso/saml/bamboo/configure.flt</view>
-       </action>
-
-       <action name="backuprestore" class="com.miniorange.sso.saml.bamboo.action.MoImportExportAction">
-           <result name="input" type="freemarker">/templates/saml/backuprestore.ftl</result>
-           <result name="success" type="freemarker">/templates/saml/backuprestore.ftl</result>
-           <result name="error" type="freemarker">/templates/saml/backuprestore.ftl</result>
-           <result name="upm" type="redirect">/plugins/servlet/upm</result>
-       </action>
-   </package>
-</xwork>
-
-<!-- Component -->
-
-    <component-import i18n-name-key="samlsso.plugin.i18nResolver" key="samlsso.plugin.i18nResolver"
-                      name="i18nResolver"  interface="com.atlassian.sal.api.message.I18nResolver"/>
-	 <component i18n-name-key="samlsso.plugin.settings" key="samlsso.plugin.settings"
-		name="SAML SSO Plugin Settings" class="com.miniorange.sso.saml.bamboo.MoSAMLSettings" />
-    <component i18n-name-key="samlsso.idp.config" key="samlsso.idp.config"
-               name="Idp Config" class="com.miniorange.sso.saml.dto.MoIDPConfig" />
-    <component i18n-name-key="samlsso.plugin.handler" key="samlsso.plugin.handler"
-		name="SAML SSO Plugin Handler" class="com.miniorange.sso.saml.bamboo.MoPluginHandler" />
-	<component i18n-name-key="samlsso.saml.message.handler" key="samlsso.saml.message.handler"
-		name="SAML Message Handler" class="com.miniorange.sso.saml.bamboo.MoSAMLManager" />
-	<component i18n-name-key="samlsso.plugin.moJobRunnerImpl" key="samlsso.plugin.moJobRunnerImpl"
-               name="JobRunner Implementation" class="com.miniorange.sso.saml.bamboo.schedulers.MoMetadataJobRunnerImpl" />
-    <component i18n-name-key="samlsso.pluginconfigurations.handler" key="samlsso.pluginconfigurations.handler"
-			   name="SAML SSO Plugin Configurations Handler" class="com.miniorange.sso.saml.bamboo.MoPluginConfigurationsHandler"/>
-    <component i18n-name-key="samlsso.send.util" key="send.util" name="Send Alert Email" class="com.miniorange.sso.saml.utils.MoSendAlert"/>
-
-    <component i18-name-key="samlsso.certificate.expiry.scheduler" key="samlsso.certificate.expiry.scheduler" class="com.miniorange.sso.saml.bamboo.schedulers.CertificateExpiryCheckImpl"
-               public="true">
-        <description>The plugin component that schedules the SP Certificate Expiry check.</description>
-        <interface>com.atlassian.sal.api.lifecycle.LifecycleAware</interface>
-        <interface>com.miniorange.sso.saml.bamboo.schedulers.CertificateExpiryCheck
-        </interface>
+    <servlet name="Reset Plugin Settings" i18n-name-key="oauth.config.resetpluginsettings" key="oauth.config.resetpluginsettings" class="com.miniorange.oauth.bamboo.servlet.MoOAuthResetSettingsServlet">
+        <description key="oauth.config.resetpluginsettings.desc">This module allows you to clear plugin settings.
+        </description>
+        <url-pattern>/bamboo-oauth/moconfreset</url-pattern>
+    </servlet>
+    <servlet name="downloadconfigurations" i18n-name-key="oauth.config.downloadconfigurations" key="oauth.config.downloadconfigurations" class="com.miniorange.oauth.bamboo.servlet.MoOAuthDownloadConfigurationsServlet">
+        <description key="oauth.config.downloadconfigurations.desc">This module handles Export of your plugin configuration.
+        </description>
+        <url-pattern>/bamboo-oauth/downloadconfigurations</url-pattern>
+    </servlet>
+    <servlet name="uploadconfigurations" i18n-name-key="oauth.config.uploadconfigurations" key="oauth.config.uploadconfigurations" class="com.miniorange.oauth.bamboo.servlet.MoOAuthUploadConfigurationsServlet">
+        <description key="oauth.config.uploadconfigurations.desc">This module handles Import of your plugin configuration.
+        </description>
+        <url-pattern>/bamboo-oauth/uploadconfigurations</url-pattern>
+    </servlet>
+    <servlet name="Configure Plugin URl" i18n-name-key="oauth.config.configureplugin" key="oauth.config.configureplugin" class="com.miniorange.oauth.bamboo.servlet.MoConfigurePlugin">
+        <description key="oauth.config.configureplugin.desc">This module allows to configure plugin with REST API </description>
+        <url-pattern>/oauth/configureplugin</url-pattern>
+    </servlet>
+    <servlet name="Enable Backdoor URl" i18n-name-key="oauth.config.enablebackdoorurl" key="oauth.config.enablebackdoorurl"
+             class="com.miniorange.oauth.bamboo.servlet.MoEnableBackdoorUrl">
+        <description key="oauth.config.enablebackdoorurl.desc">This module allows you to enable Backdoor URL.
+        </description>
+        <url-pattern>/oauth/enablebackdoorurl</url-pattern>
+    </servlet>
+    <component i18n-name-key="oauth.pluginconfigurations.handler" key="oauth.pluginconfigurations.handler"
+               name="Plugin Configurations Handler" class="com.miniorange.oauth.bamboo.MoOAuthPluginConfigurationsHandler">
+        <description>Used to import, export and reset plugin configurations</description>
     </component>
 
-    <component i18n-name-key="samlsso.plugin.migration.service" name="Plugin Migration Service" key="samlsso.plugin.migration.service"
-               class="com.miniorange.sso.saml.bamboo.schedulers.MoPluginMigrationService" public="true">
-        <interface>com.atlassian.sal.api.lifecycle.LifecycleAware</interface>
-    </component>
-<!--    <component-import i18n-name-key="samlsso.crowd.service" key="samlsso.crowd.service"-->
-<!--              name="Crowd Service" interface="com.atlassian.crowd.embedded.api.CrowdService" />-->
-<!--    <component-import i18n-name-key="samlsso.crowd.directory.service" key="samlsso.crowd.directory.service"-->
-<!--                      name="Crowd Directory Service" interface="com.atlassian.crowd.embedded.api.CrowdDirectoryService" />-->
-   
-	<component-import i18n-name-key="samlsso.plugin.settings.factory"
-		key="samlsso.plugin.settings.factory" name="Plugin Settings Factory"
-		interface="com.atlassian.sal.api.pluginsettings.PluginSettingsFactory"
-		filter="" />
-
-    <component-import key="pluginScheduler">
-        <description>SAL Scheduler</description>
-        <interface>com.atlassian.sal.api.scheduling.PluginScheduler
-        </interface>
-    </component-import>
-		
-	<component-import i18n-name-key="samlsso.user.bambooUserManager" key="samlsso.user.bambooUserManager" name="Bamboo User Manager"
-                      interface="com.atlassian.bamboo.user.BambooUserManager" filter=""/>                          
-                      
-    <component-import i18n-name-key="samlsso.user.manager" key="samlsso.user.manager" name="User Manager"
-                      interface="com.atlassian.sal.api.user.UserManager" filter=""/>                    
-                      
-    <component-import i18n-name-key="samlsso.login.uri.provider" key="samlsso.login.uri.provider"
-                      name="Login URI Provider"
-					  interface="com.atlassian.sal.api.auth.LoginUriProvider" filter=""/>
-				
-    <component-import i18n-name-key="samlsso.bamboo.security.bambooPermissionManager" key="samlsso.bamboo.security.bambooPermissionManager"
-                      name="Bamboo Permission Manager"
-					  interface="com.atlassian.bamboo.security.BambooPermissionManager" filter=""/>
-					  
-	<component-import name="Plugin License Manager" key="pluginLicenseManager"
-		i18n-name-key="samlsso.plugin.pluginLicenseManager" interface="com.atlassian.upm.api.license.PluginLicenseManager" />
-	
-	<component-import name="Bamboo AgentManager Manager" key="agentManager"
-		i18n-name-key="samlsso.plugin.agentManager" interface="com.atlassian.bamboo.buildqueue.manager.AgentManager" />
-		
-	<component-import name="Template Rendere" key="renderer"
-		i18n-name-key="samlsso.plugin.renderer" interface="com.atlassian.templaterenderer.TemplateRenderer" />
-		            
-   <component i18n-name-key="samlsso.plugin.user.manager" key="samlsso.plugin.user.manager"
-               name="Mo SAML User Manager" class ="com.miniorange.sso.saml.bamboo.MoSAMLUserManager" />
-
-    <component-import i18n-name-key="samlsso.plugin.schedulerService" key="schedulerService"
-              name="Atlassian Scheduler Service" interface="com.atlassian.scheduler.SchedulerService" />
-
-    <!-- Servlets & Filters -->
-
-    <servlet name="Configuration Servlet" i18n-name-key="samlsso.config.servlet" key="samlsso.config.servlet"
-             class="com.miniorange.sso.saml.bamboo.servlet.MoConfigurationServlet">
-        <description key="samlsso.config.servlet.desc">This module handles configuration of your Identity Provider.</description>
-        <url-pattern>/saml/getconfig</url-pattern>
-    </servlet>
-
-    <servlet name="Ajax Action Calls" i18n-name-key="samlsso.config.ajaxcallservlet" key="samlsso.config.ajaxcallservlet"
-             class="com.miniorange.sso.saml.bamboo.servlet.MoAjaxCallsServlet">
-        <description key="samlsso.config.ajaxcallservlet.desc">This module provides different ajax functions.</description>
-        <url-pattern>/saml/moapi</url-pattern>
-    </servlet>
-
-   <servlet name="Login with IDP" i18n-name-key="samlsso.login" key="samlsso.login"
-             class="com.miniorange.sso.saml.bamboo.servlet.MoSAMLLoginServlet">
-        <description key="samlsso.login.desc">This module handles login with you Identity Provider.</description>
-        <url-pattern>/saml/auth</url-pattern>
-    </servlet>
-
-    <servlet name="Replace Old Setting with New" i18n-name-key="samlsso.replace.settings" key="samlsso.replace.settings"
-             class="com.miniorange.sso.saml.bamboo.servlet.ReplaceOldSettingWithNewServlet">
-        <description key="samlsso.replace.settings.desc">This module replalce old setting with new.</description>
-        <url-pattern>/saml/replaceOldSettingsWithNew</url-pattern>
-    </servlet>
-    
-     <servlet name="SP Metadata Generator" i18n-name-key="samlsso.metadata.generator" key="samlsso.metadata.generator" class="com.miniorange.sso.saml.bamboo.servlet.MoMetadataServlet">
-        <description key="samlsso.login.desc">This module generates SP metadata for your bamboo Instance.</description>
-        <url-pattern>/saml/metadata</url-pattern>
-    </servlet> 
-    
-    <servlet name="SP Metadata Uploador" i18n-name-key="samlsso.metadata.uploador"
-		key="samlsso.metadata.uploador" class="com.miniorange.sso.saml.bamboo.servlet.MoMetadataUpload">
-		<description key="samlsso.login.desc">This module uploads SP metadata for your
-			bamboo Instance.</description>
-		<url-pattern>/bamboo-sso/metadataupload</url-pattern>
-	</servlet>
-
-    <servlet name="Delete IDP" i18n-name-key="samlsso.idp.delete"
-             key="samlsso.idp.delete" class="com.miniorange.sso.saml.bamboo.servlet.MoDeleteIdpServlet">
-        <description key="samlsso.login.desc">This module Deletes IDP from Bamboo.</description>
-        <url-pattern>/bamboo-sso/deleteidp</url-pattern>
-    </servlet>
-
-    <servlet name="Download Idp Guide" i18n-name-key="samlsso.config.downloadidpguides" key="samlsso.config.downloadidpguides"
-             class="com.miniorange.sso.saml.bamboo.servlet.MoDownloadIdpGuidesServlet">
-        <description key="samlsso.config.downloadidpguides.desc">This module allows you to download Guides for your Identity Provider.
-        </description>
-        <url-pattern>/downloadidpguides</url-pattern>
-    </servlet>
-
-    <servlet name="Enable Backdoor URL" i18n-name-key="samlsso.config.enablebackdoorurl" key="samlsso.config.enablebackdoorurl"
-             class="com.miniorange.sso.saml.bamboo.servlet.MoEnableBackdoorUrl">
-        <description key="samlsso.config.enablebackdoorurl.desc">This module allows you to enable Backdoor URL.
-        </description>
-        <url-pattern>/enablebackdoorurl</url-pattern>
-    </servlet>
-
-    <servlet name=" Enable disable SSO" i18n-name-key="samlsso.config.enablessoapi" key="samlsso.config.enablessoapi"
-             class="com.miniorange.sso.saml.bamboo.servlet.EnableSSOAPI">
-        <description key="samlsso.config.enablessoapi.desc">This module allows you to enable and disable SSO.
-        </description>
-        <url-pattern>/enablessoapi</url-pattern>
-    </servlet>
-
-    <servlet name="Configure Plugin URl" i18n-name-key="samlsso.config.configureplugin" key="samlsso.config.configureplugin"
-             class="com.miniorange.sso.saml.bamboo.servlet.MoConfigurePlugin">
-        <description key="samlsso.config.configureplugin.desc">This module allows  to configure plugin with REST API
-        </description>
-        <url-pattern>/configureplugin</url-pattern>
-    </servlet>
-
-    <servlet name="Reset Plugin Settings" i18n-name-key="samlsso.config.resetpluginsettings" key="samlsso.config.resetpluginsettings"
-             class="com.miniorange.sso.saml.bamboo.servlet.MoResetSettingsServlet">
-        <description key="samlsso.config.resetpluginsettings.desc">This module allows you to clear plugin settings.
-        </description>
-        <url-pattern>/saml/moconfreset</url-pattern>
-    </servlet>
-
-    <servlet name="SAML Single Logout" i18n-name-key="samlsso.logout" key="samlsso.logout" class="com.miniorange.sso.saml.bamboo.servlet.MoSAMLLogoutServlet">
-        <description key="samlsso.logout.desc">This module handles Single Logout with your Identity Provider.</description>
-        <url-pattern>/saml/logout</url-pattern>
-    </servlet>
-    
-     <servlet name="Download Plugin Configuration" i18n-name-key="samlsso.downloadconfiguration" key="samlsso.downloadconfiguration" class="com.miniorange.sso.saml.bamboo.servlet.MoDownloadPluginConfiguration">
-        <description key="samlsso.downloadconfiguration.desc">This module allows you to download plugin configutaion in JSON File.</description>
-        <url-pattern>/saml/downloadconfiguration</url-pattern>
-    </servlet>
-
-    <servlet name="Download SP Metadata" i18n-name-key="samlsso.downloadmetadata" key="samlsso.downloadmetadata"
-             class="com.miniorange.sso.saml.bamboo.servlet.MoDownloadMetadataServlet">
-        <description key="samlsso.downloadmetadata.desc">This module allows you to download SP metadata in an XML File.</description>
-        <url-pattern>/saml/downloadmetadata</url-pattern>
-    </servlet>
-
-    <servlet name="Upload Plugin Configuration" i18n-name-key="samlsso.upload.downloadconfiguration" key="samlsso.upload.downloadconfiguration" class="com.miniorange.sso.saml.bamboo.servlet.MoUploadPluginConfigurationServlet">
-        <description key="samlsso.upload.downloadconfiguration.desc">This module allows you to upload plugin configutaion.</description>
-        <url-pattern>/saml/uploadconfiguration</url-pattern>
-    </servlet>
-
-    <servlet name="Save Custom Metadata" i18n-name-key="samlsso.config.custommetadata" key="samlsso.config.custommetadata"
-             class="com.miniorange.sso.saml.bamboo.servlet.MoCustomMetadata">
-        <description key="samlsso.config.custommetadata.desc">This module allows you to save custom metadata
-        </description>
-        <url-pattern>/saml/updatemetadata</url-pattern>
-    </servlet>
-
-    <servlet name="Feedback Servlet" i18n-name-key="samlsso.config.moFeedbackServlet" key="samlsso.config.moFeedbackServlet"
-             class="com.miniorange.sso.saml.bamboo.servlet.MoFeedbackServlet">
-        <description key="samlsso.config.moFeedbackServlet.desc">This module sends feedback
-        </description>
-        <url-pattern>/saml/sendfeedback</url-pattern>
-    </servlet>
-
-
-    <servlet name="Header based Authentication" i18n-name-key="sso.header.auth" key="sso.header.auth"
-             class="com.miniorange.sso.saml.bamboo.servlet.MoHeaderAuthenticationServlet">
-        <description key="sso.header.auth.desc">This module handles header based authentication for this Bamboo server.
-        </description>
-        <url-pattern>/saml/header</url-pattern>
-    </servlet>
-
-    <servlet name="Generate new certificate" i18n-name-key="samlsso.gennewcert.servlet" key="samlsso.gennewcert.servlet"
-             class="com.miniorange.sso.saml.bamboo.servlet.MoGenerateCert">
-        <description key="sso.generate.certificate.desc">This module handles SP Certificate generation.
-        </description>
-        <url-pattern>/saml/mogencert</url-pattern>
-    </servlet>
-
-    <servlet name="Show test Config" i18n-name-key="samlsso.test.config.servlet" key="samlsso.test.config.servlet"
-             class="com.miniorange.sso.saml.bamboo.servlet.MoPerformTestConfiguration">
-        <description key="samlsso.test.config.servlet.desc">This module handles performs test configuration.
-        </description>
-        <url-pattern>/saml/testconfig</url-pattern>
-    </servlet>
-    
-    <servlet-filter name="Login Filter" key="samlsoo-login-filter" location="before-dispatch"
-                    class="com.miniorange.sso.saml.bamboo.servlet.MoSAMLLoginFilter" weight="200">
-        <description>Handle Auto Redirection</description>
-        <url-pattern>/userlogin!doDefault.action</url-pattern>
-        <dispatcher>REQUEST</dispatcher>
-        <dispatcher>FORWARD</dispatcher>
-    </servlet-filter>
-    
-    <servlet-filter name="SAML SLO Filter" key="saml-logout-filter" location="before-login"
-                    class="com.miniorange.sso.saml.bamboo.servlet.MoSAMLLogoutFilter" weight="0">
+    <servlet-filter name="OAuth SSO Filter" key="oauth-logout-filter" location="before-dispatch" class="com.miniorange.oauth.bamboo.servlet.MoOAuthLogoutFilter" weight="0">
         <description>
-           This module force to generate the single logout request for your identity provider.
+            Force users to redirect to the custom logout page/URL after successful logout from the system.
         </description>
-        <url-pattern>/userLogout.action*</url-pattern>
+        <url-pattern>/userLogout.jsp</url-pattern>
+        <url-pattern>/userLogout.action</url-pattern>
         <dispatcher>REQUEST</dispatcher>
         <dispatcher>FORWARD</dispatcher>
     </servlet-filter>
 
-    <servlet-filter name="No SSO Filter" key="no-SSO-filter" location="before-dispatch"
-                    class="com.miniorange.sso.saml.bamboo.servlet.MoBambooNoSSOFilter" weight="0">
-        <description> No SSO Filter Handler </description>
+    <servlet-filter name="OAuth SSO Filter" key="oauth-redirect"
+                    location="before-login"
+                    class="com.miniorange.oauth.bamboo.servlet.MoOAuthRedirectFilter"
+                    weight="0">
+        <description>
+            Force users to redirect to the idp if auto redirect is on.
+        </description>
         <url-pattern>/userlogin!doDefault.action</url-pattern>
         <dispatcher>REQUEST</dispatcher>
         <dispatcher>FORWARD</dispatcher>
     </servlet-filter>
-    
 </atlassian-plugin>
